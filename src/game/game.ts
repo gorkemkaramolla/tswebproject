@@ -2,142 +2,85 @@ const canvas: HTMLCanvasElement = <HTMLCanvasElement>(
     document.querySelector("canvas")
 );
 const c: CanvasRenderingContext2D = canvas.getContext("2d");
-const keys = {
-    d: {
-        pressed: false,
-    },
-    a: {
-        pressed: false,
-    },
-    space: {
-        pressed: false,
-        numberOfJumps: 0,
-    },
-};
-canvas.addEventListener("keydown", (e) => {
-    switch (e.key) {
-        case "d": {
-            keys.d.pressed = true;
-            break;
-        }
-        case "a": {
-            keys.a.pressed = true;
-
-            break;
-        }
-        case " ": {
-            keys.space.pressed = true;
-
-            if (keys.space.numberOfJumps === 0 || player.velocity.y === 0) {
-                // Reset the number of jumps if the player is on the ground
-                keys.space.numberOfJumps = 0;
+//COLLIDER GROUND DATA 36 cols X 27 rows
+let collider2D: number[][] = [];
+collider2D = colliderData
+    .map((_, i) => (i % 36 === 0 ? colliderData.slice(i, i + 36) : undefined))
+    .filter((arr) => arr !== undefined);
+const colliderBlocks = collider2D
+    .flatMap((row, y) =>
+        row.map((col, x) => {
+            if (col !== 0) {
+                return new CollisionBlock({
+                    position: { x: x * 16, y: y * 16 },
+                });
             }
-            break;
-        }
-        case "Shift": {
-            break;
-        }
-    }
+        })
+    )
+    .filter((block) => block !== undefined);
 
-    if (player.position.x + player.attributes.width > canvas.width) {
-        player.position.x = canvas.width - player.attributes.width;
-    }
-    if (player.position.x < 0) {
-        player.position.x = 0;
-    }
-});
-canvas.addEventListener("keyup", (e) => {
-    console.log(e.key);
-    switch (e.key) {
-        case "d": {
-            keys.d.pressed = false;
-            break;
-        }
-        case "a": {
-            keys.a.pressed = false;
+//NON COLLIDER GROUND DATA 36 columns X 27 rows
+let ground2D: number[][] = [];
+ground2D = colliderData
+    .map((_, i) => (i % 36 === 0 ? groundData.slice(i, i + 36) : undefined))
+    .filter((arr) => arr !== undefined);
 
-            break;
-        }
-        case " ": {
-        }
-    }
+//LOOPIN THROUGH THE 2D ARRAY ON CONDITION IF THERE IS A NON 0 VALUE THAT MEANS THERE IS A GROUND WITH A COLLIDER AND RETURN A NEW BLOCK
+const groundBlocks = ground2D
+    .flatMap((row, y) =>
+        row.map((col, x) => {
+            if (col !== 0) {
+                return new CollisionBlock({
+                    position: { x: x * 16, y: y * 16 },
+                });
+            }
+        })
+    )
+    .filter((block) => block !== undefined);
 
-    if (player.position.x + player.attributes.width > canvas.width) {
-        player.position.x = canvas.width - player.attributes.width;
-    }
-    if (player.position.x < 0) {
-        player.position.x = 0;
-    }
-});
+//GAME UPDATE LOOP
 canvas.focus();
 canvas.width = 1024;
 canvas.height = 576;
+const scaledCanvas = { width: canvas.width / 4, height: canvas.height / 4 };
 const gravity: number = 0.2;
-class Player {
-    position: { x: number; y: number };
-    velocity: { x: number; y: number };
-    attributes: { width: number; height: number };
-    constructor(
-        position: { x: number; y: number },
-        attributes?: { width: number; height: number }
-    ) {
-        this.position = position;
-        this.velocity = {
-            x: 0,
-            y: 1,
-        };
 
-        this.attributes = {
-            width: attributes?.width || 50,
-            height: attributes?.height || 75,
-        };
-    }
-    draw(color: string) {
-        c.fillStyle = color;
-        c.fillRect(
-            this.position.x,
-            this.position.y,
-            this.attributes.width,
-            this.attributes.height
-        );
-    }
-    update(color: string) {
-        this.draw(color);
-        this.position.y += this.velocity.y;
-        this.position.x += this.velocity.x;
-        if (
-            this.position.y + this.attributes.height + this.velocity.y <
-            canvas.height
-        ) {
-            this.velocity.y += gravity;
-            console.log(this.velocity.y);
-        } else {
-            this.velocity.y = 0;
-        }
-    }
-}
 let yAxes: number = 100;
-
+const game: GameFeatures = new GameFeatures();
 const player: Player = new Player({ x: 0, y: 0 });
 const player2: Player = new Player({ x: 900, y: 0 });
-
+const backGround: Sprite = new Sprite({
+    position: { x: 0, y: 0 },
+    imageSrc: "./background.png",
+});
 function gameLoop() {
     window.requestAnimationFrame(gameLoop);
-
     c.fillStyle = "black";
     c.fillRect(0, 0, canvas.width, canvas.height);
+    c.save();
+    c.scale(4, 4);
+    c.translate(0, -backGround.image.height + scaledCanvas.height);
+    backGround.update();
+    colliderBlocks.forEach((collider) => {
+        collider.update();
+    });
+    groundBlocks.forEach((groundTile) => {
+        groundTile.update();
+    });
+    c.restore();
+
     player.update("blue");
     player2.update("red");
     player.velocity.x = 0;
-    if (keys.d.pressed) player.velocity.x = 1;
-    if (keys.a.pressed) player.velocity.x = -1;
+    if (game.keys.d.pressed) player.velocity.x = 1;
+    if (game.keys.a.pressed) player.velocity.x = -1;
 
-    if (keys.space.pressed) {
-        if (keys.space.numberOfJumps < 2) {
+    if (game.keys.space.pressed) {
+        if (game.keys.space.numberOfJumps < 2) {
             player.velocity.y = -9; // Jump
-            keys.space.numberOfJumps++; // 0 dı 1 oldu zıpladı
+            game.keys.space.numberOfJumps++; // 0 dı 1 oldu zıpladı
         }
-        keys.space.pressed = false; // Ignore further jump inputs
+        game.keys.space.pressed = false; // Ignore further jump inputs
     }
 }
 
