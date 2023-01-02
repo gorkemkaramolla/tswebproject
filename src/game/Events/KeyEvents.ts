@@ -1,58 +1,46 @@
 canvas.addEventListener("keydown", (e) => {
-    switch (e.key) {
-        case "d": {
-            game.keys.d.pressed = true;
-            break;
-        }
-        case "a": {
-            game.keys.a.pressed = true;
-
-            break;
-        }
-        case " ": {
-            game.keys.space.pressed = true;
-
-            if (
-                game.keys.space.numberOfJumps === 0 ||
-                player.velocity.y === 0
-            ) {
-                // Reset the number of jumps if the player is on the ground
-                game.keys.space.numberOfJumps = 0;
-            }
-            break;
-        }
-        case "Shift": {
-            break;
-        }
+  switch (e.key) {
+    case "d": {
+      game.keys.d.pressed = true;
+      break;
     }
+    case "a": {
+      game.keys.a.pressed = true;
 
-    if (player.position.x + player.attributes.width > canvas.width) {
-        player.position.x = canvas.width - player.attributes.width;
+      break;
     }
-    if (player.position.x < 0) {
-        player.position.x = 0;
+    case " ": {
+      game.keys.space.pressed = true;
+      console.log(game.keys.space.numberOfJumps);
+      console.log(player.velocity.y);
+      if (game.keys.space.numberOfJumps === 0 || player.velocity.y < 0.02) {
+        // Reset the number of jumps if the player is on the ground
+      }
+      break;
     }
+    case "Shift": {
+      break;
+    }
+  }
+  console.log(player.hitbox.position.x);
+
+  if (player.hitbox.position.x + player.hitbox.width > canvas.width) {
+    player.hitbox.position.x = canvas.width - player.hitbox.width;
+  }
 });
 canvas.addEventListener("keyup", (e) => {
-    console.log(e.key);
-    switch (e.key) {
-        case "d": {
-            game.keys.d.pressed = false;
-            break;
-        }
-        case "a": {
-            game.keys.a.pressed = false;
+  console.log(e.key);
+  switch (e.key) {
+    case "d": {
+      game.keys.d.pressed = false;
+      break;
+    }
+    case "a": {
+      game.keys.a.pressed = false;
 
-            break;
-        }
-        case " ": {
-        }
+      break;
     }
-
-    if (player.position.x + player.attributes.width > canvas.width) {
-        player.position.x = canvas.width - player.attributes.width;
+    case " ": {
     }
-    if (player.position.x < 0) {
-        player.position.x = 0;
-    }
+  }
 });

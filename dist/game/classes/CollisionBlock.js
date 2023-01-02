@@ -5,7 +5,7 @@ var CollisionBlock = /** @class */ (function () {
         this.position = params.position;
     }
     CollisionBlock.prototype.draw = function () {
-        c.fillStyle = "rgba(255,0,0,0.5)";
+        c.fillStyle = "transparent";
         c.fillRect(this.position.x, this.position.y, this.width, this.height);
     };
     CollisionBlock.prototype.update = function () {
