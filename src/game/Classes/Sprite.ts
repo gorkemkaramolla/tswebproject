@@ -1,72 +1,78 @@
 class Sprite {
-  position: { x: number; y: number };
-  image: HTMLImageElement;
-  width: number;
-  height: number;
-  frameRate: number;
-  currentFrame: number;
-  frameBuffer: number;
-  elapsedFrames: number;
-  scale: number;
-  hitbox: {
-    position: {
-      x: number;
-      y: number;
-    };
+    position: { x: number; y: number };
+    image: HTMLImageElement;
     width: number;
     height: number;
-  };
-  constructor(params: {
-    position: { x: number; y: number };
+    frameRate?: number;
     imageSrc: string;
-    frameRate: number;
+    currentFrame: number;
+    imageLoaded: boolean;
+    frameBuffer: number;
+    elapsedFrames: number;
     scale: number;
-  }) {
-    this.currentFrame = 0;
-    this.frameBuffer = 8;
-    this.elapsedFrames = 0;
-    this.scale = params.scale;
-    this.position = params.position;
-    this.image = new Image();
-    this.image.onload = () => {
-      this.width = (this.image.width / this.frameRate) * this.scale;
-      this.height = this.image.height * this.scale;
+    hitbox: {
+        position: {
+            x: number;
+            y: number;
+        };
+        width: number;
+        height: number;
     };
-    this.image.src = params.imageSrc;
-    this.frameRate = params.frameRate;
-    this.hitbox = {
-      position: {
-        x: this.position.x + 35,
-        y: this.position.y + 26,
-      },
-      width: 14,
-      height: 27,
-    };
-  }
-  draw() {
-    const cropbox = {
-      position: {
-        x: this.currentFrame * (this.image.width / this.frameRate),
-        y: 0,
-      },
-      width: this.image.width / this.frameRate,
-      height: this.image.height,
-    };
-    if (!this.image) return;
+    constructor(params: {
+        position: { x: number; y: number };
+        scale: number;
+        imageSrc: string;
+        frameRate: number;
+    }) {
+        this.imageLoaded = false;
+        this.frameRate = params.frameRate;
+        this.imageSrc = params.imageSrc;
+        this.currentFrame = 0;
+        this.frameBuffer = 8;
+        this.elapsedFrames = 0;
+        this.scale = params.scale;
+        this.position = params.position;
+        this.image = new Image();
+        this.image.onload = () => {
+            this.width = (this.image.width / this.frameRate) * this.scale;
+            this.height = this.image.height * this.scale;
+            this.imageLoaded = true;
+        };
+        this.image.src = params.imageSrc;
+        this.frameRate = params.frameRate;
+        this.hitbox = {
+            position: {
+                x: this.position.x + 100,
+                y: this.position.y + 56,
+            },
+            width: 134,
+            height: 135,
+        };
+    }
+    draw() {
+        const cropbox = {
+            position: {
+                x: this.currentFrame * (this.image.width / this.frameRate),
+                y: 0,
+            },
+            width: this.image.width / this.frameRate,
+            height: this.image.height,
+        };
+        if (!this.image) return;
 
-    c.drawImage(
-      this.image,
-      cropbox.position.x,
-      cropbox.position.y,
-      cropbox.width,
-      cropbox.height,
-      this.position.x,
-      this.position.y,
-      this.width,
-      this.height
-    );
-  }
-  update() {
-    this.draw();
-  }
+        c.drawImage(
+            this.image,
+            cropbox.position.x,
+            cropbox.position.y,
+            cropbox.width,
+            cropbox.height,
+            this.position.x,
+            this.position.y,
+            this.width,
+            this.height
+        );
+    }
+    update() {
+        this.draw();
+    }
 }

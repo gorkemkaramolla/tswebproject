@@ -1,30 +1,12 @@
 var canvas = (document.querySelector("canvas"));
-var img = new Image();
-img.src = "/Users/gorkemkaramolla/Documents/tswebproject/src/character.png";
 var c = canvas.getContext("2d");
 //COLLIDER GROUND DATA 36 cols X 27 rows
-var mergedArray = [];
-for (var i = 0; i < colliderData.length; i++) {
-    if (colliderData[i] !== 0) {
-        mergedArray.push(colliderData[i]);
-    }
-    else if (groundData[i] !== 0) {
-        mergedArray.push(groundData[i]);
-    }
-    else {
-        mergedArray.push(0);
-    }
-}
-var collider2D = [];
-collider2D = mergedArray
-    .map(function (_, i) { return (i % 36 === 0 ? mergedArray.slice(i, i + 36) : undefined); })
-    .filter(function (arr) { return arr !== undefined; });
-var colliderBlocks = collider2D
+var colliderBlocks = newColliderData
     .flatMap(function (row, y) {
     return row.map(function (col, x) {
         if (col !== 0) {
             return new CollisionBlock({
-                position: { x: x * 16, y: y * 16 }
+                position: { x: x * 32, y: y * 32 }
             });
         }
     });
@@ -42,47 +24,205 @@ var yAxes = 100;
 var game = new GameFeatures();
 //NEW PLAYER
 var player = new Player({
-    position: { x: 200, y: 200 },
+    position: { x: 10, y: canvas.height - 166 },
     colliderBlocks: colliderBlocks,
-    imgSrc: "./Sprites/Player/Idle.png",
+    scale: 1,
+    imageSrc: "./Sprites/Player/Idle.png",
     frameRate: 8,
-    scale: 0.5
+    animations: {
+        Idle: {
+            imageSrc: "./Sprites/Player/Idle.png",
+            frameRate: 8,
+            frameBuffer: 16
+        },
+        IdleLeft: {
+            imageSrc: "./Sprites/Player/IdleLeft.png",
+            frameRate: 8,
+            frameBuffer: 16
+        },
+        Run: {
+            imageSrc: "./Sprites/Player/Run.png",
+            frameRate: 8,
+            frameBuffer: 16
+        },
+        RunLeft: {
+            imageSrc: "./Sprites/Player/RunLeft.png",
+            frameRate: 8,
+            frameBuffer: 16
+        },
+        Jump: {
+            imageSrc: "./Sprites/Player/Jump.png",
+            frameRate: 2,
+            frameBuffer: 6
+        },
+        Fall: {
+            imageSrc: "./Sprites/Player/Fall.png",
+            frameRate: 2,
+            frameBuffer: 6
+        },
+        JumpLeft: {
+            imageSrc: "./Sprites/Player/JumpLeft.png",
+            frameRate: 2,
+            frameBuffer: 6
+        },
+        FallLeft: {
+            imageSrc: "./Sprites/Player/FallLeft.png",
+            frameRate: 2,
+            frameBuffer: 6
+        },
+        Attack1: {
+            imageSrc: "./Sprites/Player/Attack1.png",
+            frameRate: 4,
+            frameBuffer: 8
+        }
+    },
+    updateHitBoxValue: { width: 35, height: 50, additionX: 65, additionY: 55 }
 });
-var backGround = new Sprite({
-    position: { x: 0, y: 0 },
-    imageSrc: "./background.png",
-    frameRate: 1,
-    scale: 1
+var player2 = new Player({
+    position: { x: 686, y: canvas.height - 250 },
+    colliderBlocks: colliderBlocks,
+    scale: 1.5,
+    imageSrc: "./Sprites/Enemy/Idle.png",
+    frameRate: 8,
+    animations: {
+        Idle: {
+            imageSrc: "./Sprites/Enemy/Idle.png",
+            frameRate: 8,
+            frameBuffer: 16
+        },
+        IdleLeft: {
+            imageSrc: "./Sprites/Player/IdleLeft.png",
+            frameRate: 8,
+            frameBuffer: 16
+        },
+        Run: {
+            imageSrc: "./Sprites/Enemy/Run.png",
+            frameRate: 8,
+            frameBuffer: 16
+        },
+        RunLeft: {
+            imageSrc: "./Sprites/Enemy/RunLeft.png",
+            frameRate: 8,
+            frameBuffer: 16
+        },
+        Jump: {
+            imageSrc: "./Sprites/Player/Jump.png",
+            frameRate: 2,
+            frameBuffer: 6
+        },
+        Fall: {
+            imageSrc: "./Sprites/Player/Fall.png",
+            frameRate: 2,
+            frameBuffer: 6
+        },
+        JumpLeft: {
+            imageSrc: "./Sprites/Player/JumpLeft.png",
+            frameRate: 2,
+            frameBuffer: 6
+        },
+        FallLeft: {
+            imageSrc: "./Sprites/Player/FallLeft.png",
+            frameRate: 2,
+            frameBuffer: 6
+        },
+        Attack1: {
+            imageSrc: "./Sprites/Player/Attack1.png",
+            frameRate: 4,
+            frameBuffer: 16
+        },
+        Death: {
+            imageSrc: "./Sprites/Enemy/Death.png",
+            frameRate: 6,
+            frameBuffer: 16
+        }
+    },
+    updateHitBoxValue: {
+        width: 65,
+        height: 75,
+        additionX: 80,
+        additionY: 68
+    }
 });
 function gameLoop() {
     window.requestAnimationFrame(gameLoop);
+    var deathAnimationPlayed = false;
+    var deathAnimationStartTime = 0;
+    if (player2.health === 0 && !deathAnimationPlayed) {
+        player2.swapSprite("Death");
+        deathAnimationPlayed = true;
+        deathAnimationStartTime = Date.now();
+    }
+    else if (deathAnimationPlayed) {
+        var elapsedTime = Date.now() - deathAnimationStartTime;
+        if (elapsedTime >= 2000) {
+            c.clearRect(player2.hitbox.position.x, player2.hitbox.position.y, player2.hitbox.width, player2.hitbox.height);
+        }
+    }
+    else if (player2.velocity.y === 0) {
+        player.velocity.x = -1;
+        colliderBlocks.map(function (block) {
+            player2.swapSprite("RunLeft");
+            if (collisionCheck(block, player2.hitbox)) {
+                // ...
+            }
+        });
+    }
     if (player.hitbox.position.x < 1) {
         player.velocity.x = 0;
         player.position.x = player.position.x - player.hitbox.width;
     }
     if (game.keys.space.pressed) {
-        if (game.keys.space.numberOfJumps < 2) {
-            player.velocity.y = -1.8; // Jump
-            game.keys.space.numberOfJumps++; // 0 dı 1 oldu zıpladı
+        if (player.numberOfJumps < 1) {
+            player.velocity.y = -4; // Jump
+            player.numberOfJumps++; // 0 dı 1 oldu zıpladı
         }
         game.keys.space.pressed = false; // Ignore further jump inputs
     }
-    c.fillStyle = "black";
-    c.fillRect(0, 0, canvas.width, canvas.height);
+    c.fillStyle = "#FC9C54";
+    var background = new Image();
+    background.src = "../background.jpg";
+    c.drawImage(background, 0, 0, canvas.width, canvas.height);
     c.save();
-    c.scale(4, 4);
-    c.translate(0, -backGround.image.height + scaledCanvas.height);
-    backGround.update();
     colliderBlocks.forEach(function (collider) {
         collider.update();
     });
-    player.update();
     player.velocity.x = 0;
-    if (game.keys.d.pressed)
-        player.velocity.x = 1;
-    if (game.keys.a.pressed)
-        player.velocity.x = -1;
+    if (player.playerAttack) {
+        player.swapSprite("Attack1");
+    }
+    else {
+        if (game.keys.d.pressed) {
+            player.swapSprite("Run");
+            player.velocity.x = 1;
+            player.lastDirection = "right";
+        }
+        else if (game.keys.a.pressed) {
+            player.swapSprite("RunLeft");
+            player.velocity.x = -1;
+            player.lastDirection = "left";
+        }
+        else if (player.velocity.y === 0) {
+            if (player.lastDirection === "right")
+                player.swapSprite("Idle");
+            else
+                player.swapSprite("IdleLeft");
+        }
+        if (player.velocity.y < 0) {
+            if (player.lastDirection === "right")
+                player.swapSprite("Jump");
+            else
+                player.swapSprite("JumpLeft");
+        }
+        else if (player.velocity.y > 0) {
+            if (player.lastDirection === "right")
+                player.swapSprite("Fall");
+            else
+                player.swapSprite("FallLeft");
+        }
+    }
     c.restore();
+    player.update();
+    player2.update();
 }
 gameLoop();
 //# sourceMappingURL=game.js.map

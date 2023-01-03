@@ -1,6 +1,9 @@
 var Sprite = /** @class */ (function () {
     function Sprite(params) {
         var _this = this;
+        this.imageLoaded = false;
+        this.frameRate = params.frameRate;
+        this.imageSrc = params.imageSrc;
         this.currentFrame = 0;
         this.frameBuffer = 8;
         this.elapsedFrames = 0;
@@ -10,16 +13,17 @@ var Sprite = /** @class */ (function () {
         this.image.onload = function () {
             _this.width = (_this.image.width / _this.frameRate) * _this.scale;
             _this.height = _this.image.height * _this.scale;
+            _this.imageLoaded = true;
         };
         this.image.src = params.imageSrc;
         this.frameRate = params.frameRate;
         this.hitbox = {
             position: {
-                x: this.position.x + 35,
-                y: this.position.y + 26
+                x: this.position.x + 100,
+                y: this.position.y + 56
             },
-            width: 14,
-            height: 27
+            width: 134,
+            height: 135
         };
     }
     Sprite.prototype.draw = function () {

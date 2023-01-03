@@ -10,24 +10,27 @@ canvas.addEventListener("keydown", function (e) {
         }
         case " ": {
             game.keys.space.pressed = true;
-            console.log(game.keys.space.numberOfJumps);
-            console.log(player.velocity.y);
-            if (game.keys.space.numberOfJumps === 0 || player.velocity.y < 0.02) {
+            if (game.keys.space.numberOfJumps === 0 ||
+                player.velocity.y < 0.02) {
                 // Reset the number of jumps if the player is on the ground
             }
             break;
         }
-        case "Shift": {
+        case "x": {
+            player.playerAttack = true;
+            if (player2.hitbox.position.x - 20 <
+                player.hitbox.position.x + player.hitbox.width) {
+                player2.health -= 10;
+                console.log(player2.health);
+            }
             break;
         }
     }
-    console.log(player.hitbox.position.x);
     if (player.hitbox.position.x + player.hitbox.width > canvas.width) {
         player.hitbox.position.x = canvas.width - player.hitbox.width;
     }
 });
 canvas.addEventListener("keyup", function (e) {
-    console.log(e.key);
     switch (e.key) {
         case "d": {
             game.keys.d.pressed = false;
@@ -38,6 +41,10 @@ canvas.addEventListener("keyup", function (e) {
             break;
         }
         case " ": {
+        }
+        case "x": {
+            player.playerAttack = false;
+            break;
         }
     }
 });
