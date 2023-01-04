@@ -121,6 +121,16 @@ class Player extends Sprite {
                 frameRate?: number;
                 frameBuffer: number;
             };
+            Attack2?: {
+                imageSrc: string;
+                frameRate?: number;
+                frameBuffer: number;
+            };
+            Attack3?: {
+                imageSrc: string;
+                frameRate?: number;
+                frameBuffer: number;
+            };
             Death?: {
                 imageSrc: string;
                 frameRate?: number;
@@ -166,7 +176,7 @@ class Player extends Sprite {
         c.fillStyle = "transparent";
         c.fillRect(this.position.x, this.position.y, this.width, this.height);
         //CHARACTER LAYOUT
-        c.fillStyle = "yellow";
+        c.fillStyle = "transparent";
         c.fillRect(
             this.hitbox.position.x,
             this.hitbox.position.y,

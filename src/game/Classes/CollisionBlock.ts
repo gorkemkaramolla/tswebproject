@@ -2,11 +2,19 @@ class CollisionBlock {
     position: { x: number; y: number };
     width: number = 32;
     groundImage: HTMLImageElement;
+    imageSrc: string;
     height: number = 32;
-    constructor(params: { position: { x: number; y: number } }) {
+
+    constructor(params: {
+        position: { x: number; y: number };
+        imageSrc: string;
+    }) {
+        this.imageSrc = params.imageSrc;
         this.position = params.position;
         this.groundImage = new Image();
-        this.groundImage.src = "../ground.png";
+        this.groundImage.src = `../assets/${this.imageSrc}`;
+        this.width = this.groundImage.width;
+        this.height = this.groundImage.height;
     }
     draw() {
         c.drawImage(

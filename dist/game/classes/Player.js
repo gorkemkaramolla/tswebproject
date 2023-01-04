@@ -47,7 +47,7 @@ var Player = /** @class */ (function (_super) {
         c.fillStyle = "transparent";
         c.fillRect(this.position.x, this.position.y, this.width, this.height);
         //CHARACTER LAYOUT
-        c.fillStyle = "yellow";
+        c.fillStyle = "transparent";
         c.fillRect(this.hitbox.position.x, this.hitbox.position.y, this.hitbox.width, this.hitbox.height);
         this.draw();
         this.position.x += this.velocity.x;
