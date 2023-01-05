@@ -337,7 +337,18 @@ let player2 = new Player({
 });
 let currentframes = 0;
 let gameOver = false;
-
+const camera = {
+    position: {
+        x: 0,
+        y: 0,
+    },
+};
+const prevCamera = {
+    position: {
+        x: camera.position.x,
+        y: camera.position.y,
+    },
+};
 function gameLoop() {
     let deathAnimationPlayed = false;
     let deathAnimationStartTime = 0;
@@ -385,9 +396,11 @@ function gameLoop() {
     background.src = "../background.png";
     c.drawImage(background, 0, 0, canvas.width, canvas.height);
     c.save();
+
     colliderBlocks.forEach((collider) => {
         collider.update();
     });
+    c.translate(camera.position.x, camera.position.y);
 
     player.velocity.x = 0;
 
@@ -395,6 +408,7 @@ function gameLoop() {
         player.swapSprite("Run");
         player.velocity.x = 1;
         player.lastDirection = "right";
+        player.shouldCameraMoveLeft();
     } else if (game.keys.a.pressed) {
         player.swapSprite("RunLeft");
         player.velocity.x = -1;
@@ -428,6 +442,8 @@ function gameLoop() {
 
     player.update();
     player2.update();
+    player.updateCameraBox();
+
     if (player.hitbox.position.y > canvas.height + 300) {
         gameOver = true;
         if (gameOver) {
@@ -438,6 +454,7 @@ function gameLoop() {
         player.velocity.x = 0;
         player.velocity.y = 0;
     }
+
     gameOver !== true ? window.requestAnimationFrame(gameLoop) : null;
 }
 

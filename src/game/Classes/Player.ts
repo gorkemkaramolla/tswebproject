@@ -1,64 +1,11 @@
 class Player extends Sprite {
     position: { x: number; y: number };
-    collisionblocks: CollisionBlock[];
+    numberOfJumps: number;
     velocity: { x: number; y: number };
     lastDirection: string;
     playerAttack: boolean;
     health: number;
-    updateHitBoxValue: {
-        width: number;
-        height: number;
-        additionX: number;
-        additionY: number;
-    };
-    numberOfJumps: number;
-    animations: {
-        Idle: {
-            imageSrc: string;
-            frameRate?: number;
-            image?: HTMLImageElement;
-            frameBuffer?: number;
-        };
-        IdleLeft: {
-            imageSrc: string;
-            frameRate?: number;
-            frameBuffer: number;
-        };
-        Run: {
-            imageSrc: string;
-            frameRate?: number;
-            image?: HTMLImageElement;
-            frameBuffer?: number;
-        };
-        RunLeft: {
-            imageSrc: string;
-            frameRate?: number;
-            image?: HTMLImageElement;
-            frameBuffer?: number;
-        };
-        Jump: {
-            imageSrc: string;
-            frameRate?: number;
-            image?: HTMLImageElement;
-            frameBuffer?: number;
-        };
-        Fall: {
-            imageSrc: string;
-            frameRate?: number;
-            frameBuffer: number;
-        };
-        JumpLeft: {
-            imageSrc: string;
-            frameRate?: number;
-            image?: HTMLImageElement;
-            frameBuffer?: number;
-        };
-        FallLeft: {
-            imageSrc: string;
-            frameRate?: number;
-            frameBuffer: number;
-        };
-    };
+    animations: {};
     hitbox: {
         position: {
             x: number;
@@ -67,7 +14,22 @@ class Player extends Sprite {
         width: number;
         height: number;
     };
+    updateHitBoxValue: {
+        width: number;
+        height: number;
+        additionX: number;
+        additionY: number;
+    };
     updateHitBox: () => void;
+    collisionblocks: CollisionBlock[];
+    cameraBox: {
+        position: {
+            x: number;
+            y: number;
+        };
+        width: number;
+        height: number;
+    };
 
     constructor(params: {
         position: { x: number; y: number };
@@ -75,68 +37,7 @@ class Player extends Sprite {
         scale: number;
         imageSrc: string;
         frameRate: number;
-        animations: {
-            Idle: {
-                imageSrc: string;
-                frameRate?: number;
-                frameBuffer: number;
-            };
-            IdleLeft: {
-                imageSrc: string;
-                frameRate?: number;
-                frameBuffer: number;
-            };
-            Run: {
-                imageSrc: string;
-                frameRate?: number;
-                frameBuffer: number;
-            };
-            RunLeft: {
-                imageSrc: string;
-                frameRate?: number;
-                frameBuffer: number;
-            };
-            Jump: {
-                imageSrc: string;
-                frameRate?: number;
-                frameBuffer: number;
-            };
-            Fall: {
-                imageSrc: string;
-                frameRate?: number;
-                frameBuffer: number;
-            };
-            JumpLeft: {
-                imageSrc: string;
-                frameRate?: number;
-                frameBuffer: number;
-            };
-            FallLeft: {
-                imageSrc: string;
-                frameRate?: number;
-                frameBuffer: number;
-            };
-            Attack1?: {
-                imageSrc: string;
-                frameRate?: number;
-                frameBuffer: number;
-            };
-            Attack2?: {
-                imageSrc: string;
-                frameRate?: number;
-                frameBuffer: number;
-            };
-            Attack3?: {
-                imageSrc: string;
-                frameRate?: number;
-                frameBuffer: number;
-            };
-            Death?: {
-                imageSrc: string;
-                frameRate?: number;
-                frameBuffer: number;
-            };
-        };
+        animations: {};
         updateHitBoxValue: {
             width: number;
             height: number;
@@ -150,6 +51,7 @@ class Player extends Sprite {
             imageSrc: params.imageSrc,
             frameRate: params.frameRate,
         });
+
         this.health = 100;
         this.playerAttack = false;
         this.updateHitBoxValue = params.updateHitBoxValue;
@@ -166,7 +68,53 @@ class Player extends Sprite {
             image.src = this.animations[key].imageSrc;
             this.animations[key].image = image;
         }
+        this.cameraBox = {
+            position: { x: this.position.x, y: this.position.y },
+            height: 80,
+            width: 200,
+        };
     }
+    updateCameraBox = () => {
+        this.cameraBox = {
+            position: {
+                x: this.hitbox.position.x - this.width / 2 - 10,
+                y: this.hitbox.position.y - this.hitbox.height / 2 + 10,
+            },
+            height: 80,
+            width: 200,
+        };
+        c.fillStyle = "rgba(255,31,255,0.3)";
+        c.fillRect(
+            player.cameraBox.position.x,
+            player.cameraBox.position.y,
+            player.cameraBox.width,
+            player.cameraBox.height
+        );
+    };
+    shouldCameraMoveLeft = () => {
+        const cameraBoxRight = this.cameraBox.position.x + this.cameraBox.width;
+        if (cameraBoxRight >= canvas.width) {
+            console.log("touches");
+            prevCamera.position.x = camera.position.x;
+            prevCamera.position.y = camera.position.y;
+
+            camera.position.x -= this.velocity.x;
+            colliderBlocks.forEach((collider) => {
+                console.log(camera.position.x + "camera");
+                console.log(prevCamera.position.x + "prevCamera");
+
+                collider.position.x +=
+                    camera.position.x - prevCamera.position.x;
+                collider.position.y +=
+                    camera.position.y - prevCamera.position.y;
+            });
+        }
+    };
+    shouldCameraMoveRight = () => {
+        const cameraBoxRight = this.cameraBox.position.x + this.cameraBox.width;
+        if (cameraBoxRight >= canvas.width) {
+        }
+    };
 
     update() {
         this.updateFrames();
@@ -176,7 +124,7 @@ class Player extends Sprite {
         c.fillStyle = "transparent";
         c.fillRect(this.position.x, this.position.y, this.width, this.height);
         //CHARACTER LAYOUT
-        c.fillStyle = "transparent";
+        c.fillStyle = "green";
         c.fillRect(
             this.hitbox.position.x,
             this.hitbox.position.y,
@@ -187,8 +135,6 @@ class Player extends Sprite {
 
         this.position.x += this.velocity.x;
         this.updateHitbox();
-
-        this.checkHorizontalCollisions();
 
         this.applyGravity();
         this.updateHitbox();
@@ -215,42 +161,10 @@ class Player extends Sprite {
                         return;
                     }
                 }
-                if (this.velocity.y < 0) {
-                    this.velocity.y = 0;
-                    if (this.velocity.y === 0) {
-                        const offset = this.hitbox.position.y - this.position.y;
-                        this.position.y = block.position.y + offset + 0.01;
-                        return;
-                    }
-                }
             }
         });
     }
-    checkHorizontalCollisions() {
-        this.collisionblocks.map((block) => {
-            if (collisionCheck(block, this.hitbox)) {
-                if (this.velocity.x > 0) {
-                    this.velocity.x = 0;
-                    const offset =
-                        this.hitbox.position.x -
-                        this.position.x +
-                        this.hitbox.width;
 
-                    this.position.x = block.position.x - offset - 0.01;
-                    return;
-                }
-
-                if (this.velocity.x < 0) {
-                    this.velocity.x = 0;
-                    const offset = this.hitbox.position.x - this.position.x;
-
-                    this.position.x =
-                        block.position.x + block.width - offset + 0.01;
-                    return;
-                }
-            }
-        });
-    }
     updateHitbox() {
         this.hitbox = {
             position: {

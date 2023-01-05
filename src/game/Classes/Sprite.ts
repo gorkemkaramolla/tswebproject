@@ -10,14 +10,7 @@ class Sprite {
     frameBuffer: number;
     elapsedFrames: number;
     scale: number;
-    hitbox: {
-        position: {
-            x: number;
-            y: number;
-        };
-        width: number;
-        height: number;
-    };
+    hitbox: {};
     constructor(params: {
         position: { x: number; y: number };
         scale: number;

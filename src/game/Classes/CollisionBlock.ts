@@ -19,8 +19,8 @@ class CollisionBlock {
     draw() {
         c.drawImage(
             this.groundImage,
-            this.position.x,
-            this.position.y,
+            this.position.x + camera.position.x,
+            this.position.y + camera.position.y,
             this.width,
             this.height
         );

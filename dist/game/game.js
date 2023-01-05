@@ -321,6 +321,18 @@ var player2 = new Player({
 });
 var currentframes = 0;
 var gameOver = false;
+var camera = {
+    position: {
+        x: 0,
+        y: 0
+    }
+};
+var prevCamera = {
+    position: {
+        x: camera.position.x,
+        y: camera.position.y
+    }
+};
 function gameLoop() {
     var deathAnimationPlayed = false;
     var deathAnimationStartTime = 0;
@@ -364,11 +376,13 @@ function gameLoop() {
     colliderBlocks.forEach(function (collider) {
         collider.update();
     });
+    c.translate(camera.position.x, camera.position.y);
     player.velocity.x = 0;
     if (game.keys.d.pressed) {
         player.swapSprite("Run");
         player.velocity.x = 1;
         player.lastDirection = "right";
+        player.shouldCameraMoveLeft();
     }
     else if (game.keys.a.pressed) {
         player.swapSprite("RunLeft");
@@ -410,6 +424,7 @@ function gameLoop() {
     c.restore();
     player.update();
     player2.update();
+    player.updateCameraBox();
     if (player.hitbox.position.y > canvas.height + 300) {
         gameOver = true;
         if (gameOver) {

@@ -10,7 +10,7 @@ var CollisionBlock = /** @class */ (function () {
         this.height = this.groundImage.height;
     }
     CollisionBlock.prototype.draw = function () {
-        c.drawImage(this.groundImage, this.position.x, this.position.y, this.width, this.height);
+        c.drawImage(this.groundImage, this.position.x + camera.position.x, this.position.y + camera.position.y, this.width, this.height);
         // c.fillStyle = `red`;
         // c.fillRect(this.position.x, this.position.y, this.width, this.height);
     };
