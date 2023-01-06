@@ -20,23 +20,23 @@ function keyEvents() {
                     break;
                 }
                 case "x": {
-                    if (!keyIsPressed) {
+                    if (player.playerAttack === false) {
+                        console.log("true oldum");
+                        player.playerAttack = true;
                         if (attackCount < 3) {
-                            if (player.playerAttack === false)
-                                attackCount++;
+                            attackCount++;
                         }
                         else {
                             attackCount = 1;
                         }
-                        player.playerAttack = true;
+                        player.swapSprite("Attack1");
                         attack.currentTime = 0;
                         attack.play();
                         keyIsPressed = true;
                     }
-                    if (player2.hitbox.position.x - 20 <
+                    if (player2.hitbox.position.x - 50 <
                         player.hitbox.position.x + player.hitbox.width) {
-                        player2.health -= 10;
-                        console.log(player2.health);
+                        player2.health -= 100;
                     }
                     break;
                 }
@@ -58,8 +58,6 @@ function keyEvents() {
                 case " ": {
                 }
                 case "x": {
-                    e.preventDefault();
-                    keyIsPressed = false;
                     break;
                 }
             }

@@ -22,40 +22,52 @@ var Player = /** @class */ (function (_super) {
             imageSrc: params.imageSrc,
             frameRate: params.frameRate
         }) || this;
+        _this.playerIsDeath = false;
+        _this.deathAnimationPlayed = false;
         _this.updateCameraBox = function () {
             _this.cameraBox = {
                 position: {
-                    x: _this.hitbox.position.x - _this.width / 2 - 10,
+                    x: _this.hitbox.position.x - _this.cameraBox.width / 2,
                     y: _this.hitbox.position.y - _this.hitbox.height / 2 + 10
                 },
                 height: 80,
-                width: 200
+                width: canvas.width * 2
             };
-            c.fillStyle = "rgba(255,31,255,0.3)";
+            c.fillStyle = "rgba(255,30,222,0.2)";
             c.fillRect(player.cameraBox.position.x, player.cameraBox.position.y, player.cameraBox.width, player.cameraBox.height);
         };
         _this.shouldCameraMoveLeft = function () {
             var cameraBoxRight = _this.cameraBox.position.x + _this.cameraBox.width;
             if (cameraBoxRight >= canvas.width) {
-                console.log("touches");
                 prevCamera.position.x = camera.position.x;
                 prevCamera.position.y = camera.position.y;
-                camera.position.x -= _this.velocity.x;
+                camera.position.x -= 2;
                 colliderBlocks.forEach(function (collider) {
-                    console.log(camera.position.x + "camera");
-                    console.log(prevCamera.position.x + "prevCamera");
                     collider.position.x +=
-                        camera.position.x - prevCamera.position.x;
+                        1 * (camera.position.x - prevCamera.position.x);
                     collider.position.y +=
                         camera.position.y - prevCamera.position.y;
                 });
+                player2.position.x += camera.position.x - prevCamera.position.x;
             }
         };
         _this.shouldCameraMoveRight = function () {
-            var cameraBoxRight = _this.cameraBox.position.x + _this.cameraBox.width;
-            if (cameraBoxRight >= canvas.width) {
+            var cameraBoxLeft = _this.cameraBox.position.x;
+            if (cameraBoxLeft <= 0) {
+                prevCamera.position.x = camera.position.x;
+                prevCamera.position.y = camera.position.y;
+                camera.position.x += 2;
+                colliderBlocks.forEach(function (collider) {
+                    cameraBoxLeft;
+                    collider.position.x +=
+                        1 * (camera.position.x - prevCamera.position.x);
+                    collider.position.y +=
+                        camera.position.y - prevCamera.position.y;
+                });
+                player2.position.x += camera.position.x - prevCamera.position.x;
             }
         };
+        _this.typeOfPlayer = params.typeOfPlayer;
         _this.health = 100;
         _this.playerAttack = false;
         _this.updateHitBoxValue = params.updateHitBoxValue;
@@ -79,6 +91,20 @@ var Player = /** @class */ (function (_super) {
         };
         return _this;
     }
+    Player.prototype.enemyAIMovement = function () {
+        if (player.hitbox.position.x + player.hitbox.width <
+            player2.hitbox.position.x &&
+            !player2.playerIsDeath) {
+            player2.velocity.x = -1;
+        }
+        else if (player.hitbox.position.x + player.hitbox.width ===
+            player2.hitbox.position.x) {
+            player.health = 0;
+        }
+        else {
+            player2.velocity.x = 0;
+        }
+    };
     Player.prototype.update = function () {
         this.updateFrames();
         this.updateHitbox();
@@ -91,6 +117,7 @@ var Player = /** @class */ (function (_super) {
         this.draw();
         this.position.x += this.velocity.x;
         this.updateHitbox();
+        this.checkVerticalCollisions();
         this.applyGravity();
         this.updateHitbox();
         this.checkVerticalCollisions();
@@ -138,7 +165,41 @@ var Player = /** @class */ (function (_super) {
                 }
             }
             else {
-                this.currentFrame++;
+                if (this.image.src.split("game/")[1] ===
+                    "Sprites/Player/Jump.png" ||
+                    this.image.src.split("game/")[1] ===
+                        "Sprites/Player/JumpLeft.png" ||
+                    this.image.src.split("game/")[1] ===
+                        "Sprites/Player/Fall.png" ||
+                    this.image.src.split("game/")[1] ===
+                        "Sprites/Player/FallLeft.png") {
+                    if (this.currentFrame < 1) {
+                        this.currentFrame++;
+                        console.log(this.currentFrame);
+                    }
+                }
+                else {
+                    this.currentFrame++;
+                }
+                if ((this.image.src.split("game/")[1] ===
+                    "Sprites/Player/Death.png" &&
+                    this.currentFrame === this.frameRate) ||
+                    (this.image.src.split("game/")[1] ===
+                        "Sprites/Enemy/Death.png" &&
+                        this.currentFrame === this.frameRate)) {
+                    this.deathAnimationPlayed = true;
+                }
+                if ((this.image.src.split("game/")[1] ===
+                    "Sprites/Player/Attack1.png" &&
+                    this.currentFrame === this.frameRate) ||
+                    (this.image.src.split("game/")[1] ===
+                        "Sprites/Player/Attack2.png" &&
+                        this.currentFrame === this.frameRate) ||
+                    (this.image.src.split("game/")[1] ===
+                        "Sprites/Player/Attack3.png" &&
+                        this.currentFrame === this.frameRate)) {
+                    this.playerAttack = false;
+                }
                 if (this.currentFrame >= this.frameRate) {
                     this.currentFrame = 0;
                 }
@@ -150,12 +211,10 @@ var Player = /** @class */ (function (_super) {
             !this.imageLoaded) {
             return;
         }
-        else {
-            this.frameBuffer = this.animations[spriteName].frameBuffer;
-            this.frameRate =
-                this.animations[spriteName].frameRate || this.frameRate;
-            this.image = this.animations[spriteName].image;
-        }
+        this.currentFrame = 0;
+        this.image = this.animations[spriteName].image;
+        this.frameBuffer = this.animations[spriteName].frameBuffer;
+        this.frameRate = this.animations[spriteName].frameRate;
     };
     return Player;
 }(Sprite));

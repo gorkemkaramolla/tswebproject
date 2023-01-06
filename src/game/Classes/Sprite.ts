@@ -21,7 +21,7 @@ class Sprite {
         this.frameRate = params.frameRate;
         this.imageSrc = params.imageSrc;
         this.currentFrame = 0;
-        this.frameBuffer = 8;
+        this.frameBuffer = 24;
         this.elapsedFrames = 0;
         this.scale = params.scale;
         this.position = params.position;

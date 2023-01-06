@@ -3,8 +3,11 @@ class Player extends Sprite {
     numberOfJumps: number;
     velocity: { x: number; y: number };
     lastDirection: string;
+    typeOfPlayer: string;
     playerAttack: boolean;
     health: number;
+    playerIsDeath = false;
+    deathAnimationPlayed = false;
     animations: {};
     hitbox: {
         position: {
@@ -32,6 +35,7 @@ class Player extends Sprite {
     };
 
     constructor(params: {
+        typeOfPlayer: string;
         position: { x: number; y: number };
         colliderBlocks: CollisionBlock[];
         scale: number;
@@ -51,6 +55,7 @@ class Player extends Sprite {
             imageSrc: params.imageSrc,
             frameRate: params.frameRate,
         });
+        this.typeOfPlayer = params.typeOfPlayer;
 
         this.health = 100;
         this.playerAttack = false;
@@ -77,13 +82,13 @@ class Player extends Sprite {
     updateCameraBox = () => {
         this.cameraBox = {
             position: {
-                x: this.hitbox.position.x - this.width / 2 - 10,
+                x: this.hitbox.position.x - this.cameraBox.width / 2,
                 y: this.hitbox.position.y - this.hitbox.height / 2 + 10,
             },
             height: 80,
-            width: 200,
+            width: canvas.width * 2,
         };
-        c.fillStyle = "rgba(255,31,255,0.3)";
+        c.fillStyle = "rgba(255,30,222,0.2)";
         c.fillRect(
             player.cameraBox.position.x,
             player.cameraBox.position.y,
@@ -94,28 +99,53 @@ class Player extends Sprite {
     shouldCameraMoveLeft = () => {
         const cameraBoxRight = this.cameraBox.position.x + this.cameraBox.width;
         if (cameraBoxRight >= canvas.width) {
-            console.log("touches");
             prevCamera.position.x = camera.position.x;
             prevCamera.position.y = camera.position.y;
 
-            camera.position.x -= this.velocity.x;
+            camera.position.x -= 2;
             colliderBlocks.forEach((collider) => {
-                console.log(camera.position.x + "camera");
-                console.log(prevCamera.position.x + "prevCamera");
-
                 collider.position.x +=
-                    camera.position.x - prevCamera.position.x;
+                    1 * (camera.position.x - prevCamera.position.x);
                 collider.position.y +=
                     camera.position.y - prevCamera.position.y;
             });
+            player2.position.x += camera.position.x - prevCamera.position.x;
         }
     };
     shouldCameraMoveRight = () => {
-        const cameraBoxRight = this.cameraBox.position.x + this.cameraBox.width;
-        if (cameraBoxRight >= canvas.width) {
+        const cameraBoxLeft = this.cameraBox.position.x;
+        if (cameraBoxLeft <= 0) {
+            prevCamera.position.x = camera.position.x;
+            prevCamera.position.y = camera.position.y;
+
+            camera.position.x += 2;
+            colliderBlocks.forEach((collider) => {
+                cameraBoxLeft;
+
+                collider.position.x +=
+                    1 * (camera.position.x - prevCamera.position.x);
+                collider.position.y +=
+                    camera.position.y - prevCamera.position.y;
+            });
+            player2.position.x += camera.position.x - prevCamera.position.x;
         }
     };
-
+    enemyAIMovement() {
+        if (
+            player.hitbox.position.x + player.hitbox.width <
+                player2.hitbox.position.x &&
+            !player2.playerIsDeath
+        ) {
+            player2.velocity.x = -1;
+        } else if (
+            player.hitbox.position.x + player.hitbox.width ===
+            player2.hitbox.position.x
+        ) {
+            player.health = 0;
+        } else {
+            player2.velocity.x = 0;
+        }
+    }
     update() {
         this.updateFrames();
         this.updateHitbox();
@@ -135,7 +165,7 @@ class Player extends Sprite {
 
         this.position.x += this.velocity.x;
         this.updateHitbox();
-
+        this.checkVerticalCollisions();
         this.applyGravity();
         this.updateHitbox();
 
@@ -187,7 +217,48 @@ class Player extends Sprite {
                     this.currentFrame = 7;
                 }
             } else {
-                this.currentFrame++;
+                if (
+                    this.image.src.split("game/")[1] ===
+                        "Sprites/Player/Jump.png" ||
+                    this.image.src.split("game/")[1] ===
+                        "Sprites/Player/JumpLeft.png" ||
+                    this.image.src.split("game/")[1] ===
+                        "Sprites/Player/Fall.png" ||
+                    this.image.src.split("game/")[1] ===
+                        "Sprites/Player/FallLeft.png"
+                ) {
+                    if (this.currentFrame < 1) {
+                        this.currentFrame++;
+                        console.log(this.currentFrame);
+                    }
+                } else {
+                    this.currentFrame++;
+                }
+                if (
+                    (this.image.src.split("game/")[1] ===
+                        "Sprites/Player/Death.png" &&
+                        this.currentFrame === this.frameRate) ||
+                    (this.image.src.split("game/")[1] ===
+                        "Sprites/Enemy/Death.png" &&
+                        this.currentFrame === this.frameRate)
+                ) {
+                    this.deathAnimationPlayed = true;
+                }
+
+                if (
+                    (this.image.src.split("game/")[1] ===
+                        "Sprites/Player/Attack1.png" &&
+                        this.currentFrame === this.frameRate) ||
+                    (this.image.src.split("game/")[1] ===
+                        "Sprites/Player/Attack2.png" &&
+                        this.currentFrame === this.frameRate) ||
+                    (this.image.src.split("game/")[1] ===
+                        "Sprites/Player/Attack3.png" &&
+                        this.currentFrame === this.frameRate)
+                ) {
+                    this.playerAttack = false;
+                }
+
                 if (this.currentFrame >= this.frameRate) {
                     this.currentFrame = 0;
                 }
@@ -200,11 +271,11 @@ class Player extends Sprite {
             !this.imageLoaded
         ) {
             return;
-        } else {
-            this.frameBuffer = this.animations[spriteName].frameBuffer;
-            this.frameRate =
-                this.animations[spriteName].frameRate || this.frameRate;
-            this.image = this.animations[spriteName].image;
         }
+        this.currentFrame = 0;
+        this.image = this.animations[spriteName].image;
+
+        this.frameBuffer = this.animations[spriteName].frameBuffer;
+        this.frameRate = this.animations[spriteName].frameRate;
     }
 }

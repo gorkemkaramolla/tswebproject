@@ -106,13 +106,13 @@ var mainMenu = function () {
             canvas.removeEventListener("mousedown", mouseDown);
             canvas.removeEventListener("mouseup", functionMouseUp);
             canvas.removeEventListener("mousemove", mouseMove);
-            gameOver = false;
-            startGame();
             backgroundMusic.autoplay = true;
             backgroundMusic.currentTime = 0;
             backgroundMusic.play();
             gameLooping = true;
+            gameOver = false;
             keyEvents();
+            init();
             gameLoop();
         }
         else if (x >= button2X &&

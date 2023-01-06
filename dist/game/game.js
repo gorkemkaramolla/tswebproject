@@ -4,6 +4,7 @@ var c = canvas.getContext("2d");
 var gameLooping = false;
 var attackCount = 0;
 var init = function () {
+    currentframes = 0;
     gameLooping = false;
     canvas.focus();
     canvas.width = 1024;
@@ -29,7 +30,10 @@ var init = function () {
     game = new GameFeatures();
     //NEW PLAYER
     player = new Player({
-        position: { x: 10, y: canvas.height - 166 },
+        position: {
+            x: canvas.width / 2 - player.hitbox.width / 2,
+            y: canvas.height - 166
+        },
         colliderBlocks: colliderBlocks,
         scale: 1,
         imageSrc: "./Sprites/Player/Idle.png",
@@ -58,37 +62,42 @@ var init = function () {
             Jump: {
                 imageSrc: "./Sprites/Player/Jump.png",
                 frameRate: 2,
-                frameBuffer: 6
+                frameBuffer: 24
             },
             Fall: {
                 imageSrc: "./Sprites/Player/Fall.png",
                 frameRate: 2,
-                frameBuffer: 6
+                frameBuffer: 24
             },
             JumpLeft: {
                 imageSrc: "./Sprites/Player/JumpLeft.png",
                 frameRate: 2,
-                frameBuffer: 6
+                frameBuffer: 24
             },
             FallLeft: {
                 imageSrc: "./Sprites/Player/FallLeft.png",
                 frameRate: 2,
-                frameBuffer: 6
+                frameBuffer: 24
             },
             Attack1: {
                 imageSrc: "./Sprites/Player/Attack1.png",
                 frameRate: 4,
-                frameBuffer: 12
+                frameBuffer: 16
             },
             Attack2: {
                 imageSrc: "./Sprites/Player/Attack2.png",
                 frameRate: 4,
-                frameBuffer: 12
+                frameBuffer: 16
             },
             Attack3: {
                 imageSrc: "./Sprites/Player/Attack3.png",
                 frameRate: 4,
-                frameBuffer: 12
+                frameBuffer: 16
+            },
+            Death: {
+                imageSrc: "./Sprites/Player/Death.png",
+                frameRate: 6,
+                frameBuffer: 16
             }
         },
         updateHitBoxValue: {
@@ -96,7 +105,8 @@ var init = function () {
             height: 50,
             additionX: 70,
             additionY: 55
-        }
+        },
+        typeOfPlayer: "player"
     });
     player2 = new Player({
         position: { x: 686, y: canvas.height - 250 },
@@ -111,7 +121,7 @@ var init = function () {
                 frameBuffer: 16
             },
             IdleLeft: {
-                imageSrc: "./Sprites/Player/IdleLeft.png",
+                imageSrc: "./Sprites/Enemy/IdleLeft.png",
                 frameRate: 8,
                 frameBuffer: 16
             },
@@ -126,34 +136,34 @@ var init = function () {
                 frameBuffer: 16
             },
             Jump: {
-                imageSrc: "./Sprites/Player/Jump.png",
+                imageSrc: "./Sprites/Enemy/Jump.png",
                 frameRate: 2,
                 frameBuffer: 6
             },
             Fall: {
-                imageSrc: "./Sprites/Player/Fall.png",
+                imageSrc: "./Sprites/Enemy/Fall.png",
                 frameRate: 2,
                 frameBuffer: 6
             },
             JumpLeft: {
-                imageSrc: "./Sprites/Player/JumpLeft.png",
+                imageSrc: "./Sprites/Enemy/JumpLeft.png",
                 frameRate: 2,
                 frameBuffer: 6
             },
             FallLeft: {
-                imageSrc: "./Sprites/Player/FallLeft.png",
+                imageSrc: "./Sprites/Enemy/FallLeft.png",
                 frameRate: 2,
                 frameBuffer: 6
             },
             Attack1: {
-                imageSrc: "./Sprites/Player/Attack1.png",
+                imageSrc: "./Sprites/Enemy/Attack1.png",
                 frameRate: 4,
                 frameBuffer: 16
             },
             Death: {
                 imageSrc: "./Sprites/Enemy/Death.png",
                 frameRate: 6,
-                frameBuffer: 16
+                frameBuffer: 24
             }
         },
         updateHitBoxValue: {
@@ -161,11 +171,11 @@ var init = function () {
             height: 75,
             additionX: 80,
             additionY: 68
-        }
+        },
+        typeOfPlayer: "enemy"
     });
-    currentframes = 0;
-    gameOver = false;
 };
+//INIT ENDS
 var animationFrameID = 0;
 var colliderBlocks = newColliderData
     .flatMap(function (row, y) {
@@ -185,6 +195,7 @@ var colliderBlocks = newColliderData
 canvas.focus();
 canvas.width = 1024;
 canvas.height = 576;
+var currentframes = 0;
 var gravity = 0.05;
 var yAxes = 100;
 var game = new GameFeatures();
@@ -219,40 +230,46 @@ var player = new Player({
         Jump: {
             imageSrc: "./Sprites/Player/Jump.png",
             frameRate: 2,
-            frameBuffer: 6
+            frameBuffer: 24
         },
         Fall: {
             imageSrc: "./Sprites/Player/Fall.png",
             frameRate: 2,
-            frameBuffer: 6
+            frameBuffer: 24
         },
         JumpLeft: {
             imageSrc: "./Sprites/Player/JumpLeft.png",
             frameRate: 2,
-            frameBuffer: 6
+            frameBuffer: 24
         },
         FallLeft: {
             imageSrc: "./Sprites/Player/FallLeft.png",
             frameRate: 2,
-            frameBuffer: 6
+            frameBuffer: 24
         },
         Attack1: {
             imageSrc: "./Sprites/Player/Attack1.png",
             frameRate: 4,
-            frameBuffer: 12
+            frameBuffer: 16
         },
         Attack2: {
             imageSrc: "./Sprites/Player/Attack2.png",
             frameRate: 4,
-            frameBuffer: 12
+            frameBuffer: 16
         },
         Attack3: {
             imageSrc: "./Sprites/Player/Attack3.png",
             frameRate: 4,
-            frameBuffer: 12
+            frameBuffer: 16
+        },
+        Death: {
+            imageSrc: "./Sprites/Player/Death.png",
+            frameRate: 6,
+            frameBuffer: 16
         }
     },
-    updateHitBoxValue: { width: 24, height: 50, additionX: 70, additionY: 55 }
+    updateHitBoxValue: { width: 24, height: 50, additionX: 70, additionY: 55 },
+    typeOfPlayer: "player"
 });
 var player2 = new Player({
     position: { x: 686, y: canvas.height - 250 },
@@ -309,7 +326,7 @@ var player2 = new Player({
         Death: {
             imageSrc: "./Sprites/Enemy/Death.png",
             frameRate: 6,
-            frameBuffer: 16
+            frameBuffer: 24
         }
     },
     updateHitBoxValue: {
@@ -317,9 +334,9 @@ var player2 = new Player({
         height: 75,
         additionX: 80,
         additionY: 68
-    }
+    },
+    typeOfPlayer: "enemy"
 });
-var currentframes = 0;
 var gameOver = false;
 var camera = {
     position: {
@@ -333,29 +350,8 @@ var prevCamera = {
         y: camera.position.y
     }
 };
+var player1DeathAnimationPLayed = false;
 function gameLoop() {
-    var deathAnimationPlayed = false;
-    var deathAnimationStartTime = 0;
-    if (player2.health === 0 && !deathAnimationPlayed) {
-        player2.swapSprite("Death");
-        deathAnimationPlayed = true;
-        deathAnimationStartTime = Date.now();
-    }
-    else if (deathAnimationPlayed) {
-        var elapsedTime = Date.now() - deathAnimationStartTime;
-        if (elapsedTime >= 2000) {
-            c.clearRect(player2.hitbox.position.x, player2.hitbox.position.y, player2.hitbox.width, player2.hitbox.height);
-        }
-    }
-    else if (player2.velocity.y === 0) {
-        player.velocity.x = -1;
-        colliderBlocks.map(function (block) {
-            player2.swapSprite("RunLeft");
-            if (collisionCheck(block, player2.hitbox)) {
-                // ...
-            }
-        });
-    }
     if (player.hitbox.position.x < 1) {
         player.velocity.x = 0;
         player.position.x = player.position.x - player.hitbox.width;
@@ -378,68 +374,87 @@ function gameLoop() {
     });
     c.translate(camera.position.x, camera.position.y);
     player.velocity.x = 0;
-    if (game.keys.d.pressed) {
-        player.swapSprite("Run");
-        player.velocity.x = 1;
+    if (game.keys.d.pressed && !player.playerIsDeath) {
+        if (!player.playerAttack)
+            player.swapSprite("Run");
         player.lastDirection = "right";
         player.shouldCameraMoveLeft();
     }
-    else if (game.keys.a.pressed) {
-        player.swapSprite("RunLeft");
-        player.velocity.x = -1;
+    else if (game.keys.a.pressed && !player.playerIsDeath) {
+        if (!player.playerAttack)
+            player.swapSprite("RunLeft");
         player.lastDirection = "left";
+        player.shouldCameraMoveRight();
     }
-    else if (player.velocity.y === 0) {
-        if (player.lastDirection === "right")
+    else if (player.velocity.y === 0 && !player.playerAttack) {
+        if (player.lastDirection === "right" &&
+            !player.playerIsDeath &&
+            !player.playerAttack)
             player.swapSprite("Idle");
-        else
+        else if (player.lastDirection === "left" &&
+            !player.playerIsDeath &&
+            !player.playerAttack)
             player.swapSprite("IdleLeft");
     }
-    if (player.velocity.y < 0) {
-        if (player.lastDirection === "right")
-            player.swapSprite("Jump");
-        else
-            player.swapSprite("JumpLeft");
+    if (player.velocity.y < 0 && !player.playerAttack) {
+        if (player.lastDirection === "right" && !player.playerIsDeath) {
+            if (!player.playerAttack)
+                player.swapSprite("Jump");
+        }
+        else if (player.lastDirection === "left" && !player.playerIsDeath) {
+            if (!player.playerAttack)
+                player.swapSprite("JumpLeft");
+        }
     }
-    else if (player.velocity.y > 0) {
-        if (player.lastDirection === "right")
+    else if (player.velocity.y > 0 && !player.playerAttack) {
+        if (player.lastDirection === "right" && !player.playerIsDeath)
             player.swapSprite("Fall");
-        else
+        else if (player.lastDirection === "left" && !player.playerIsDeath) {
             player.swapSprite("FallLeft");
+        }
     }
-    if (player.playerAttack) {
-        console.log(attackCount);
+    if (player.playerAttack && !player.playerIsDeath) {
         if (attackCount === 1)
             player.swapSprite("Attack1");
         else if (attackCount === 2)
             player.swapSprite("Attack2");
         else if (attackCount === 3)
             player.swapSprite("Attack3");
-        currentframes++;
-        if (currentframes == 45) {
-            player.playerAttack = false;
-            currentframes = 0;
-        }
     }
     c.restore();
+    player2.enemyAIMovement();
     player.update();
-    player2.update();
+    if (player2.deathAnimationPlayed === false) {
+        player2.update();
+    }
     player.updateCameraBox();
     if (player.hitbox.position.y > canvas.height + 300) {
         gameOver = true;
-        if (gameOver) {
-            backgroundMusic.pause();
-            mainMenu();
-        }
         player.hitbox.position.y = 0;
         player.velocity.x = 0;
         player.velocity.y = 0;
+    }
+    //PLAYER1
+    if (player.health <= 0) {
+        player.playerIsDeath = true;
+        player.swapSprite("Death");
+        if (player.deathAnimationPlayed)
+            gameOver = true;
+    }
+    //ENEMY
+    if (player2.health <= 0) {
+        player2.playerIsDeath = true;
+        player2.velocity.x = 0;
+        player2.swapSprite("Death");
+    }
+    if (gameOver) {
+        backgroundMusic.pause();
+        mainMenu();
     }
     gameOver !== true ? window.requestAnimationFrame(gameLoop) : null;
 }
 function startGame() {
     init();
 }
-startGame();
 mainMenu();
 //# sourceMappingURL=game.js.map
