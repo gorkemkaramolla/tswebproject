@@ -33,7 +33,7 @@ var Player = /** @class */ (function (_super) {
                 height: 80,
                 width: canvas.width * 2
             };
-            c.fillStyle = "rgba(255,30,222,0.2)";
+            c.fillStyle = "transparent";
             c.fillRect(player.cameraBox.position.x, player.cameraBox.position.y, player.cameraBox.width, player.cameraBox.height);
         };
         _this.shouldCameraMoveLeft = function () {
@@ -112,7 +112,7 @@ var Player = /** @class */ (function (_super) {
         c.fillStyle = "transparent";
         c.fillRect(this.position.x, this.position.y, this.width, this.height);
         //CHARACTER LAYOUT
-        c.fillStyle = "green";
+        c.fillStyle = "transparent";
         c.fillRect(this.hitbox.position.x, this.hitbox.position.y, this.hitbox.width, this.hitbox.height);
         this.draw();
         this.position.x += this.velocity.x;
