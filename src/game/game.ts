@@ -483,7 +483,7 @@ function gameLoop() {
     }
 
     c.restore();
-    player2.enemyAIMovement();
+    // player2.enemyAIMovement();
     player.update();
     //PLAYER2 ANIMATIONS
 
