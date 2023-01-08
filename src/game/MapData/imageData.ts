@@ -20,4 +20,5 @@ const images = [
     "ground-test.png",
     "ground-test2.png",
     "GENIS.png",
+    "flat.png",
 ];

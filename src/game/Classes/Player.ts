@@ -82,13 +82,17 @@ class Player extends Sprite {
     updateCameraBox = () => {
         this.cameraBox = {
             position: {
-                x: this.hitbox.position.x - this.cameraBox.width / 2,
-                y: this.hitbox.position.y - this.hitbox.height / 2 + 10,
+                x:
+                    this.hitbox.position.x +
+                    this.hitbox.width / 2 -
+                    this.cameraBox.width / 2,
+
+                y: this.hitbox.position.y - this.hitbox.height / 2,
             },
             height: 80,
-            width: canvas.width * 2,
+            width: 200,
         };
-        c.fillStyle = "transparent";
+        c.fillStyle = "rgba(127,211,33,0.3)";
         c.fillRect(
             player.cameraBox.position.x,
             player.cameraBox.position.y,
@@ -96,56 +100,103 @@ class Player extends Sprite {
             player.cameraBox.height
         );
     };
-    shouldCameraMoveLeft = () => {
-        const cameraBoxRight = this.cameraBox.position.x + this.cameraBox.width;
-        if (cameraBoxRight >= canvas.width) {
-            prevCamera.position.x = camera.position.x;
-            prevCamera.position.y = camera.position.y;
 
-            camera.position.x -= 2;
-            colliderBlocks.forEach((collider) => {
-                collider.position.x +=
-                    1 * (camera.position.x - prevCamera.position.x);
-                collider.position.y +=
-                    camera.position.y - prevCamera.position.y;
-            });
-            player2.position.x += camera.position.x - prevCamera.position.x;
+    shouldPlatformMoveLeft = () => {
+        console.log(player.hitbox.position.x + player.hitbox.width);
+
+        const playerHitboxX = player.hitbox.position.x + player.hitbox.width;
+        const canvasWidth = canvas.width;
+        // Check if the player's hitbox position is within the boundaries of the map
+        if (playerHitboxX > 66 && playerHitboxX < 2048) {
+            if (playerHitboxX <= canvasWidth / 2) {
+                // Move the player
+                player.velocity.x = 1;
+            } else {
+                // Move the camera and collider blocks in the opposite direction of the player's hitbox position
+                // Set the player's velocity to 0 when the player's position is greater than 32
+                let movement = playerHitboxX >= canvasWidth / 2 ? 1 : 0;
+                if (Math.abs(camera.position.x) > 3069) {
+                    player.velocity.x = 1;
+                    movement = 0;
+                }
+
+                camera.position.x -= movement;
+
+                colliderBlocks.forEach((collider) => {
+                    collider.position.x -= movement;
+                });
+                player2.position.x -= movement;
+            }
         }
     };
-    shouldCameraMoveRight = () => {
-        const cameraBoxLeft = this.cameraBox.position.x;
-        if (cameraBoxLeft <= 0) {
-            prevCamera.position.x = camera.position.x;
-            prevCamera.position.y = camera.position.y;
 
-            camera.position.x += 2;
-            colliderBlocks.forEach((collider) => {
-                cameraBoxLeft;
+    shouldPlatformMoveRight = () => {
+        const playerHitboxX = player.hitbox.position.x;
+        const canvasWidth = canvas.width;
+        // Check if the player's hitbox position is within the boundaries of the map
+        let movement = 0;
+        player.velocity.x = -1;
 
-                collider.position.x +=
-                    1 * (camera.position.x - prevCamera.position.x);
-                collider.position.y +=
-                    camera.position.y - prevCamera.position.y;
-            });
-            player2.position.x += camera.position.x - prevCamera.position.x;
+        if (playerHitboxX > 0) {
+            // Check if the player's hitbox position is within the range where the player can move left
+            // Move the camera and collider blocks instead
+
+            if (player.hitbox.position.x + player.hitbox.width === 512) {
+                console.log(player.hitbox.position.x + player.hitbox.width);
+                player.velocity.x = 0;
+                movement = 1;
+                if (camera.position.x > 0) {
+                    movement = 0;
+                    player.velocity.x = -1;
+                }
+            }
         }
+        camera.position.x += movement;
+        colliderBlocks.forEach((collider) => {
+            collider.position.x += movement;
+        });
+        player2.position.x += movement;
     };
+
     enemyAIMovement() {
+        // check horizontal distance between player and AI
         if (
-            player.hitbox.position.x + player.hitbox.width <
-                player2.hitbox.position.x &&
+            player.hitbox.position.x < player2.hitbox.position.x &&
             !player2.playerIsDeath
         ) {
-            player2.velocity.x = -1;
-        } else if (
-            player.hitbox.position.x + player.hitbox.width ===
-            player2.hitbox.position.x
-        ) {
-            player.health = 0;
+            player2.velocity.x = -1.5; // move left
+        } else if (player.hitbox.position.x > player2.hitbox.position.x) {
+            player2.velocity.x = 1.5; // move right
         } else {
+            player2.velocity.x = 0; // don't move horizontally
+        }
+
+        // check vertical distance between player and AI
+        if (player.hitbox.position.y < player2.hitbox.position.y) {
+            player2.velocity.y = 0; // don't move vertically
             player2.velocity.x = 0;
         }
+
+        // check for collision between player and AI hitboxes
+        if (this.checkCollision(player.hitbox, player2.hitbox)) {
+            if (player.playerAttack) {
+                player2.health = 0; // attack enemy
+            } else {
+                player.health = 0; // player dies
+            }
+        }
     }
+
+    checkCollision(hitbox1, hitbox2) {
+        // check if hitboxes overlap
+        return (
+            hitbox1.position.x < hitbox2.position.x + hitbox2.width &&
+            hitbox1.position.x + hitbox1.width > hitbox2.position.x &&
+            hitbox1.position.y < hitbox2.position.y + hitbox2.height &&
+            hitbox1.position.y + hitbox1.height > hitbox2.position.y
+        );
+    }
+
     update() {
         this.updateFrames();
         this.updateHitbox();
@@ -229,7 +280,6 @@ class Player extends Sprite {
                 ) {
                     if (this.currentFrame < 1) {
                         this.currentFrame++;
-                        console.log(this.currentFrame);
                     }
                 } else {
                     this.currentFrame++;

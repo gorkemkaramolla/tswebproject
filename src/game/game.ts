@@ -10,6 +10,18 @@ let attackCount = 0;
 const init = () => {
     currentframes = 0;
 
+    camera = {
+        position: {
+            x: 0,
+            y: 0,
+        },
+    };
+    prevCamera = {
+        position: {
+            x: camera.position.x,
+            y: camera.position.y,
+        },
+    };
     gameLooping = false;
     canvas.focus();
     canvas.width = 1024;
@@ -40,8 +52,8 @@ const init = () => {
     //NEW PLAYER
     player = new Player({
         position: {
-            x: canvas.width / 2 - player.hitbox.width / 2,
-            y: canvas.height - 166,
+            x: 55 - player.hitbox.width / 2,
+            y: canvas.height / 4,
         },
         colliderBlocks,
         scale: 1,
@@ -217,7 +229,7 @@ let yAxes: number = 100;
 let game: GameFeatures = new GameFeatures();
 //NEW PLAYER
 let player = new Player({
-    position: { x: 10, y: canvas.height - 166 },
+    position: { x: 0, y: canvas.height - 166 },
     colliderBlocks,
     scale: 1,
     imageSrc: "./Sprites/Player/Idle.png",
@@ -302,7 +314,7 @@ let player2 = new Player({
             frameBuffer: 16,
         },
         IdleLeft: {
-            imageSrc: "./Sprites/Player/IdleLeft.png",
+            imageSrc: "./Sprites/Enemy/IdleLeft.png",
             frameRate: 8,
             frameBuffer: 16,
         },
@@ -317,27 +329,27 @@ let player2 = new Player({
             frameBuffer: 16,
         },
         Jump: {
-            imageSrc: "./Sprites/Player/Jump.png",
+            imageSrc: "./Sprites/Enemy/Jump.png",
             frameRate: 2,
             frameBuffer: 6,
         },
         Fall: {
-            imageSrc: "./Sprites/Player/Fall.png",
+            imageSrc: "./Sprites/Enemy/Fall.png",
             frameRate: 2,
             frameBuffer: 6,
         },
         JumpLeft: {
-            imageSrc: "./Sprites/Player/JumpLeft.png",
+            imageSrc: "./Sprites/Enemy/JumpLeft.png",
             frameRate: 2,
             frameBuffer: 6,
         },
         FallLeft: {
-            imageSrc: "./Sprites/Player/FallLeft.png",
+            imageSrc: "./Sprites/Enemy/FallLeft.png",
             frameRate: 2,
             frameBuffer: 6,
         },
         Attack1: {
-            imageSrc: "./Sprites/Player/Attack1.png",
+            imageSrc: "./Sprites/Enemy/Attack1.png",
             frameRate: 4,
             frameBuffer: 16,
         },
@@ -356,13 +368,13 @@ let player2 = new Player({
     typeOfPlayer: "enemy",
 });
 let gameOver = false;
-const camera = {
+let camera = {
     position: {
         x: 0,
         y: 0,
     },
 };
-const prevCamera = {
+let prevCamera = {
     position: {
         x: camera.position.x,
         y: camera.position.y,
@@ -378,7 +390,7 @@ function gameLoop() {
     if (game.keys.space.pressed) {
         if (player.numberOfJumps < 1 && player.velocity.y < 0.5) {
             jumpMusic.play();
-            player.velocity.y = -4; // Jump
+            player.velocity.y = -4;
             player.numberOfJumps++; // 0 dı 1 oldu zıpladı
         }
         game.keys.space.pressed = false; // Ignore further jump inputs
@@ -388,22 +400,20 @@ function gameLoop() {
     background.src = "../background.png";
     c.drawImage(background, 0, 0, canvas.width, canvas.height);
     c.save();
-
     colliderBlocks.forEach((collider) => {
         collider.update();
     });
-    c.translate(camera.position.x, camera.position.y);
 
     player.velocity.x = 0;
 
     if (game.keys.d.pressed && !player.playerIsDeath) {
         if (!player.playerAttack) player.swapSprite("Run");
         player.lastDirection = "right";
-        player.shouldCameraMoveLeft();
+        player.shouldPlatformMoveLeft();
     } else if (game.keys.a.pressed && !player.playerIsDeath) {
         if (!player.playerAttack) player.swapSprite("RunLeft");
         player.lastDirection = "left";
-        player.shouldCameraMoveRight();
+        player.shouldPlatformMoveRight();
     } else if (player.velocity.y === 0 && !player.playerAttack) {
         if (
             player.lastDirection === "right" &&
@@ -440,9 +450,10 @@ function gameLoop() {
     }
 
     c.restore();
-    player2.enemyAIMovement();
-
+    // player2.enemyAIMovement();
     player.update();
+    //PLAYER2 ANIMATIONS
+
     if (player2.deathAnimationPlayed === false) {
         player2.update();
     }
@@ -468,6 +479,14 @@ function gameLoop() {
         player2.velocity.x = 0;
 
         player2.swapSprite("Death");
+    } else {
+        if (player2.velocity.x === -2) {
+            player2.swapSprite("RunLeft");
+        } else if (player2.velocity.x === 2) {
+            player2.swapSprite("Run");
+        } else {
+            player2.swapSprite("Idle");
+        }
     }
     if (gameOver) {
         backgroundMusic.pause();
