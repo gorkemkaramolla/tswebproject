@@ -39,6 +39,19 @@ var Sprite = /** @class */ (function () {
             return;
         c.drawImage(this.image, cropbox.position.x, cropbox.position.y, cropbox.width, cropbox.height, this.position.x, this.position.y, this.width, this.height);
     };
+    Sprite.prototype.draw2 = function (counter) {
+        var cropbox = {
+            position: {
+                x: counter * (this.image.width / this.frameRate),
+                y: 0
+            },
+            width: this.image.width / this.frameRate,
+            height: this.image.height
+        };
+        if (!this.image)
+            return;
+        c.drawImage(this.image, cropbox.position.x, cropbox.position.y, cropbox.width, cropbox.height, this.position.x, this.position.y, this.width, this.height);
+    };
     Sprite.prototype.update = function () {
         this.draw();
     };

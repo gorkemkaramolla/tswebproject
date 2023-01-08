@@ -1,4 +1,6 @@
 class Player extends Sprite {
+    counter: number;
+
     position: { x: number; y: number };
     numberOfJumps: number;
     velocity: { x: number; y: number };
@@ -56,7 +58,7 @@ class Player extends Sprite {
             frameRate: params.frameRate,
         });
         this.typeOfPlayer = params.typeOfPlayer;
-
+        this.counter = 5;
         this.health = 100;
         this.playerAttack = false;
         this.updateHitBoxValue = params.updateHitBoxValue;
@@ -92,7 +94,7 @@ class Player extends Sprite {
             height: 80,
             width: 200,
         };
-        c.fillStyle = "rgba(127,211,33,0.3)";
+        c.fillStyle = "transparent";
         c.fillRect(
             player.cameraBox.position.x,
             player.cameraBox.position.y,
@@ -102,8 +104,6 @@ class Player extends Sprite {
     };
 
     shouldPlatformMoveLeft = () => {
-        console.log(player.hitbox.position.x + player.hitbox.width);
-
         const playerHitboxX = player.hitbox.position.x + player.hitbox.width;
         const canvasWidth = canvas.width;
         // Check if the player's hitbox position is within the boundaries of the map
@@ -115,7 +115,10 @@ class Player extends Sprite {
                 // Move the camera and collider blocks in the opposite direction of the player's hitbox position
                 // Set the player's velocity to 0 when the player's position is greater than 32
                 let movement = playerHitboxX >= canvasWidth / 2 ? 1 : 0;
-                if (Math.abs(camera.position.x) > 3069) {
+                if (
+                    Math.abs(camera.position.x) >
+                    newColliderData[0].length * 32 - canvasWidth
+                ) {
                     player.velocity.x = 1;
                     movement = 0;
                 }
@@ -141,8 +144,7 @@ class Player extends Sprite {
             // Check if the player's hitbox position is within the range where the player can move left
             // Move the camera and collider blocks instead
 
-            if (player.hitbox.position.x + player.hitbox.width === 512) {
-                console.log(player.hitbox.position.x + player.hitbox.width);
+            if (player.hitbox.position.x <= canvas.width / 2) {
                 player.velocity.x = 0;
                 movement = 1;
                 if (camera.position.x > 0) {
@@ -205,19 +207,24 @@ class Player extends Sprite {
         c.fillStyle = "transparent";
         c.fillRect(this.position.x, this.position.y, this.width, this.height);
         //CHARACTER LAYOUT
-        c.fillStyle = "transparent";
+        c.fillStyle = "rgba(233,110,33,0.3)";
         c.fillRect(
             this.hitbox.position.x,
             this.hitbox.position.y,
             this.hitbox.width,
             this.hitbox.height
         );
-        this.draw();
+        if (this.image.src.split("game/")[1] === "Sprites/Player/DeathLeft.png")
+            super.draw2(this.counter);
+        else {
+            this.draw();
+        }
 
         this.position.x += this.velocity.x;
         this.updateHitbox();
-        this.checkVerticalCollisions();
+
         this.applyGravity();
+        this.checkForHorizontalCollisions();
         this.updateHitbox();
 
         this.checkVerticalCollisions();
@@ -227,10 +234,52 @@ class Player extends Sprite {
 
         this.position.y += this.velocity.y;
     }
+    checkForHorizontalCollisions() {
+        for (let i = 0; i < this.collisionblocks.length; i++) {
+            const collisionBlock = this.collisionblocks[i];
+
+            if (this.checkCollision(collisionBlock, this.hitbox)) {
+                if (game.keys.d.pressed && !player.playerIsDeath) {
+                    this.velocity.x = 0;
+
+                    const offset =
+                        this.hitbox.position.x -
+                        this.position.x +
+                        this.hitbox.width;
+
+                    this.position.x = collisionBlock.position.x - offset - 0.01;
+                    console.log(collisionBlock.position.x - offset - 0.01);
+                    break;
+                }
+
+                if (game.keys.a.pressed && !player.playerIsDeath) {
+                    this.velocity.x = 0;
+
+                    const offset = this.hitbox.position.x - this.position.x;
+
+                    this.position.x =
+                        collisionBlock.position.x +
+                        collisionBlock.width -
+                        offset +
+                        0.01;
+                    console.log(
+                        collisionBlock.position.x +
+                            collisionBlock.width -
+                            offset +
+                            0.01
+                    );
+
+                    break;
+                }
+            }
+        }
+    }
+
     checkVerticalCollisions() {
         this.collisionblocks.map((block) => {
             if (collisionCheck(block, this.hitbox)) {
                 this.numberOfJumps = 0;
+
                 if (this.velocity.y > 0) {
                     this.velocity.y = 0;
                     if (this.velocity.y === 0) {
@@ -238,7 +287,7 @@ class Player extends Sprite {
                             this.hitbox.position.y -
                             this.position.y +
                             this.hitbox.height;
-                        this.position.y = block.position.y - offset - 0.01;
+                        this.position.y = block.position.y - offset;
                         return;
                     }
                 }
@@ -261,11 +310,34 @@ class Player extends Sprite {
         if (this.elapsedFrames % this.frameBuffer === 0) {
             if (
                 this.image.src.split("game/")[1] ===
+                    "Sprites/Player/Attack1Left.png" ||
+                this.image.src.split("game/")[1] ===
+                    "Sprites/Player/Attack3Left.png" ||
+                this.image.src.split("game/")[1] ===
+                    "Sprites/Player/Attack2Left.png"
+            ) {
+                this.currentFrame--;
+                if (this.currentFrame < 0) {
+                    this.currentFrame = 3;
+                }
+                if (this.currentFrame === 0) {
+                    this.playerAttack = false;
+                }
+            } else if (
+                this.image.src.split("game/")[1] ===
                 "Sprites/Player/RunLeft.png"
             ) {
                 this.currentFrame--;
                 if (this.currentFrame < 0) {
                     this.currentFrame = 7;
+                }
+            } else if (
+                this.image.src.split("game/")[1] ===
+                "Sprites/Player/DeathLeft.png"
+            ) {
+                this.counter--;
+                if (this.counter === 0) {
+                    this.deathAnimationPlayed = true;
                 }
             } else {
                 if (
@@ -290,6 +362,9 @@ class Player extends Sprite {
                         this.currentFrame === this.frameRate) ||
                     (this.image.src.split("game/")[1] ===
                         "Sprites/Enemy/Death.png" &&
+                        this.currentFrame === this.frameRate) ||
+                    (this.image.src.split("game/")[1] ===
+                        "Sprites/Enemy/DeathLeft.png" &&
                         this.currentFrame === this.frameRate)
                 ) {
                     this.deathAnimationPlayed = true;

@@ -96,8 +96,18 @@ var init = function () {
                 frameRate: 4,
                 frameBuffer: 16
             },
+            Attack1Left: {
+                imageSrc: "./Sprites/Player/Attack1Left.png",
+                frameRate: 4,
+                frameBuffer: 16
+            },
             Attack2: {
                 imageSrc: "./Sprites/Player/Attack2.png",
+                frameRate: 4,
+                frameBuffer: 16
+            },
+            Attack2Left: {
+                imageSrc: "./Sprites/Player/Attack2Left.png",
                 frameRate: 4,
                 frameBuffer: 16
             },
@@ -106,8 +116,18 @@ var init = function () {
                 frameRate: 4,
                 frameBuffer: 16
             },
+            Attack3Left: {
+                imageSrc: "./Sprites/Player/Attack3Left.png",
+                frameRate: 4,
+                frameBuffer: 16
+            },
             Death: {
                 imageSrc: "./Sprites/Player/Death.png",
+                frameRate: 6,
+                frameBuffer: 16
+            },
+            DeathLeft: {
+                imageSrc: "./Sprites/Player/DeathLeft.png",
                 frameRate: 6,
                 frameBuffer: 16
             }
@@ -121,7 +141,7 @@ var init = function () {
         typeOfPlayer: "player"
     });
     player2 = new Player({
-        position: { x: 686, y: canvas.height - 250 },
+        position: { x: 1900, y: canvas.height - 250 },
         colliderBlocks: colliderBlocks,
         scale: 1.5,
         imageSrc: "./Sprites/Enemy/Idle.png",
@@ -278,13 +298,18 @@ var player = new Player({
             imageSrc: "./Sprites/Player/Death.png",
             frameRate: 6,
             frameBuffer: 16
+        },
+        DeathLeft: {
+            imageSrc: "./Sprites/Player/DeathLeft.png",
+            frameRate: 6,
+            frameBuffer: 16
         }
     },
     updateHitBoxValue: { width: 24, height: 50, additionX: 70, additionY: 55 },
     typeOfPlayer: "player"
 });
 var player2 = new Player({
-    position: { x: 686, y: canvas.height - 250 },
+    position: { x: 1900, y: canvas.height - 250 },
     colliderBlocks: colliderBlocks,
     scale: 1.5,
     imageSrc: "./Sprites/Enemy/Idle.png",
@@ -425,15 +450,27 @@ function gameLoop() {
         }
     }
     if (player.playerAttack && !player.playerIsDeath) {
-        if (attackCount === 1)
-            player.swapSprite("Attack1");
-        else if (attackCount === 2)
-            player.swapSprite("Attack2");
-        else if (attackCount === 3)
-            player.swapSprite("Attack3");
+        if (attackCount === 1) {
+            if (player.lastDirection === "right")
+                player.swapSprite("Attack1");
+            else
+                player.swapSprite("Attack1Left");
+        }
+        else if (attackCount === 2) {
+            if (player.lastDirection === "right")
+                player.swapSprite("Attack2");
+            else
+                player.swapSprite("Attack2Left");
+        }
+        else if (attackCount === 3) {
+            if (player.lastDirection === "right")
+                player.swapSprite("Attack3");
+            else
+                player.swapSprite("Attack3Left");
+        }
     }
     c.restore();
-    // player2.enemyAIMovement();
+    player2.enemyAIMovement();
     player.update();
     //PLAYER2 ANIMATIONS
     if (player2.deathAnimationPlayed === false) {
@@ -449,9 +486,14 @@ function gameLoop() {
     //PLAYER1
     if (player.health <= 0) {
         player.playerIsDeath = true;
-        player.swapSprite("Death");
-        if (player.deathAnimationPlayed)
+        if (player.lastDirection === "right")
+            player.swapSprite("Death");
+        else {
+            player.swapSprite("DeathLeft");
+        }
+        if (player.deathAnimationPlayed) {
             gameOver = true;
+        }
     }
     //ENEMY
     if (player2.health <= 0) {

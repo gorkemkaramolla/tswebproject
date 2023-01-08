@@ -10,6 +10,10 @@ var GameFeatures = /** @class */ (function () {
             space: {
                 pressed: false,
                 numberOfJumps: 0
+            },
+            shift: {
+                pressed: false,
+                numberOfDashes: 0
             }
         };
     }

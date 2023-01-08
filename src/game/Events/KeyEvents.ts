@@ -23,6 +23,13 @@ function keyEvents() {
                     }
                     break;
                 }
+                case "Shift": {
+                    game.keys.shift.pressed = true;
+                    player.lastDirection === "right"
+                        ? (player.position.x += 50)
+                        : (player.position.x -= 50);
+                    break;
+                }
                 case "x": {
                     if (player.playerAttack === false) {
                         console.log("true oldum");

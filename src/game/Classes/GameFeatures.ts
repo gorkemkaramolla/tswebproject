@@ -10,5 +10,10 @@ class GameFeatures {
             pressed: false,
             numberOfJumps: 0,
         },
+        shift: {
+            pressed: false,
+            numberOfDashes: 0,
+        },
+        
     };
 }

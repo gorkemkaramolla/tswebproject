@@ -33,6 +33,7 @@ class Sprite {
         };
         this.image.src = params.imageSrc;
         this.frameRate = params.frameRate;
+
         this.hitbox = {
             position: {
                 x: this.position.x + 100,
@@ -46,6 +47,29 @@ class Sprite {
         const cropbox = {
             position: {
                 x: this.currentFrame * (this.image.width / this.frameRate),
+                y: 0,
+            },
+            width: this.image.width / this.frameRate,
+            height: this.image.height,
+        };
+        if (!this.image) return;
+
+        c.drawImage(
+            this.image,
+            cropbox.position.x,
+            cropbox.position.y,
+            cropbox.width,
+            cropbox.height,
+            this.position.x,
+            this.position.y,
+            this.width,
+            this.height
+        );
+    }
+    draw2(counter: number) {
+        const cropbox = {
+            position: {
+                x: counter * (this.image.width / this.frameRate),
                 y: 0,
             },
             width: this.image.width / this.frameRate,
