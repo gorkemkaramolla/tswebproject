@@ -207,7 +207,7 @@ class Player extends Sprite {
         c.fillStyle = "transparent";
         c.fillRect(this.position.x, this.position.y, this.width, this.height);
         //CHARACTER LAYOUT
-        c.fillStyle = "rgba(233,110,33,0.3)";
+        c.fillStyle = "transparent";
         c.fillRect(
             this.hitbox.position.x,
             this.hitbox.position.y,

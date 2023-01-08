@@ -154,7 +154,7 @@ var Player = /** @class */ (function (_super) {
         c.fillStyle = "transparent";
         c.fillRect(this.position.x, this.position.y, this.width, this.height);
         //CHARACTER LAYOUT
-        c.fillStyle = "rgba(233,110,33,0.3)";
+        c.fillStyle = "transparent";
         c.fillRect(this.hitbox.position.x, this.hitbox.position.y, this.hitbox.width, this.hitbox.height);
         if (this.image.src.split("game/")[1] === "Sprites/Player/DeathLeft.png")
             _super.prototype.draw2.call(this, this.counter);
