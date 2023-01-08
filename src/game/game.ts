@@ -444,12 +444,14 @@ function gameLoop() {
         }
     }
     if (game.keys.d.pressed && !player.playerIsDeath) {
-        if (!player.playerAttack) player.swapSprite("Run");
         player.lastDirection = "right";
+
+        if (!player.playerAttack) player.swapSprite("Run");
         player.shouldPlatformMoveLeft();
     } else if (game.keys.a.pressed && !player.playerIsDeath) {
-        if (!player.playerAttack) player.swapSprite("RunLeft");
         player.lastDirection = "left";
+
+        if (!player.playerAttack) player.swapSprite("RunLeft");
         player.shouldPlatformMoveRight();
     } else if (player.velocity.y === 0 && !player.playerAttack) {
         if (
