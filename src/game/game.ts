@@ -431,6 +431,18 @@ function gameLoop() {
 
     player.velocity.x = 0;
 
+    if (player.playerAttack && !player.playerIsDeath) {
+        if (attackCount === 1) {
+            if (player.lastDirection === "right") player.swapSprite("Attack1");
+            else player.swapSprite("Attack1Left");
+        } else if (attackCount === 2) {
+            if (player.lastDirection === "right") player.swapSprite("Attack2");
+            else player.swapSprite("Attack2Left");
+        } else if (attackCount === 3) {
+            if (player.lastDirection === "right") player.swapSprite("Attack3");
+            else player.swapSprite("Attack3Left");
+        }
+    }
     if (game.keys.d.pressed && !player.playerIsDeath) {
         if (!player.playerAttack) player.swapSprite("Run");
         player.lastDirection = "right";
@@ -465,19 +477,6 @@ function gameLoop() {
             player.swapSprite("Fall");
         else if (player.lastDirection === "left" && !player.playerIsDeath) {
             player.swapSprite("FallLeft");
-        }
-    }
-
-    if (player.playerAttack && !player.playerIsDeath) {
-        if (attackCount === 1) {
-            if (player.lastDirection === "right") player.swapSprite("Attack1");
-            else player.swapSprite("Attack1Left");
-        } else if (attackCount === 2) {
-            if (player.lastDirection === "right") player.swapSprite("Attack2");
-            else player.swapSprite("Attack2Left");
-        } else if (attackCount === 3) {
-            if (player.lastDirection === "right") player.swapSprite("Attack3");
-            else player.swapSprite("Attack3Left");
         }
     }
 
