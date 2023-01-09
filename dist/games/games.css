@@ -1,0 +1,9 @@
+.grid-game {
+    background-color: rgb(185, 185, 240);
+    width: 95vw;
+    color: red;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
