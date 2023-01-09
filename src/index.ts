@@ -1,6 +1,7 @@
+const gamesList = ["sausageflip", "SubwaySurfer", "monkeys", "boom"];
 const container = document.querySelectorAll(".grid1-1");
 
-container.forEach((item) => {
+container.forEach((item, i) => {
     const playBtn = document.createElement("div");
     playBtn.classList.add("play-btn");
 
@@ -24,5 +25,8 @@ container.forEach((item) => {
 
     svg.appendChild(path);
     playBtn.appendChild(svg);
+    playBtn.addEventListener("click", () => {
+        window.location.href = `./games/${gamesList[i]}.html`;
+    });
     item.appendChild(playBtn);
 });
