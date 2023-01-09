@@ -1,4 +1,5 @@
 class GameFeatures {
+    level = 0;
     keys = {
         d: {
             pressed: false,
@@ -14,6 +15,5 @@ class GameFeatures {
             pressed: false,
             numberOfDashes: 0,
         },
-        
     };
 }

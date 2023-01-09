@@ -1,63 +1,28 @@
-// const burger: HTMLElement = document.getElementById("menu-icon");
-// const ul: HTMLElement = document.querySelector("ul");
-// const closeButton: HTMLElement = document.querySelector(".closeButton");
-// const nav: HTMLElement = document.querySelector("nav");
-/* closeButton.addEventListener("click", () => {
-    nav.classList.toggle("active");
+const container = document.querySelectorAll(".grid1-1");
 
-    burger.classList.toggle("burgerOpened");
-    closeButton.classList.toggle("active");
-    document
-        .querySelectorAll("ul li")
-        .forEach((li) => li.classList.toggle("active"));
-    closeButton.classList.toggle("burgerOpened");
+container.forEach((item) => {
+    const playBtn = document.createElement("div");
+    playBtn.classList.add("play-btn");
+
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute(
+        "style",
+        "fill: rgb(235, 209, 235); width: 48px; height: 48px;"
+    );
+    svg.setAttribute("id", "Layer_1");
+    svg.setAttribute("x", "0");
+    svg.setAttribute("y", "0");
+    svg.setAttribute("version", "1.1");
+    svg.setAttribute("viewBox", "0 0 29 29");
+    svg.setAttribute("xml:space", "preserve");
+
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute(
+        "d",
+        "M6.568 27.002c-.49 0-.98-.127-1.429-.383a2.857 2.857 0 0 1-1.461-2.512V4.892c0-1.053.546-1.992 1.461-2.512.914-.521 2-.51 2.905.029l16.142 9.608c.883.526 1.411 1.454 1.411 2.483s-.528 1.957-1.411 2.483L8.045 26.591a2.884 2.884 0 0 1-1.477.411zM6.572 4a.922.922 0 0 0-.445.119.873.873 0 0 0-.45.773v19.216c0 .467.314.696.45.773a.873.873 0 0 0 .895-.009l16.141-9.608c.392-.233.435-.612.435-.764s-.042-.531-.435-.764L7.021 4.128A.858.858 0 0 0 6.572 4z"
+    );
+
+    svg.appendChild(path);
+    playBtn.appendChild(svg);
+    item.appendChild(playBtn);
 });
-burger.addEventListener("click", () => {
-    nav.classList.toggle("active");
-    burger.classList.toggle("burgerOpened");
-    closeButton.classList.toggle("active");
-
-    document
-        .querySelectorAll("ul li")
-        .forEach((li) => li.classList.toggle("active"));
-}); */
-const container: HTMLElement = document.querySelector(".animation-container");
-const item: HTMLElement = document.querySelector(".item");
-const monster: HTMLElement = document.querySelector(".monster");
-const element: HTMLElement = document.querySelector(".animation-element");
-let mouseX: number = 0;
-let mouseY: number = 0;
-let x: number = 0;
-let y: number = 50;
-container.addEventListener("mousemove", (event) => {
-    // Calculate the position of the mouse cursor relative to the container element
-    mouseX = event.clientX;
-    mouseY = event.clientY;
-    console.log(mouseX, mouseY);
-    // Update the position of the animation element
-});
-
-function updatePosition() {
-    const parentRect = container.getBoundingClientRect();
-    const parentWidth = parentRect.width;
-    const parentHeight = parentRect.height;
-    const distanceX = x - mouseX;
-    const distanceY = y - mouseY;
-
-    // Update the position of the item element towards the mouse cursor
-    x -= distanceX * 0.1;
-    y -= distanceY * 0.1;
-    x = Math.max(0, Math.min(container.offsetWidth - item.offsetWidth, x));
-    y = Math.max(0, Math.min(container.offsetHeight - item.offsetHeight, y));
-    let r = Math.round(Math.random() * mouseX);
-    let g = Math.round(Math.random() * mouseY);
-    let b = Math.round((Math.random() * mouseX + Math.random() * mouseY) / 2);
-
-    monster.style.fill = `rgb(${r}, ${g}, ${b})`;
-    // Update the position of the item element using the updated x and y values
-    item.style.left = `${x}px`;
-    item.style.top = `${y}px`;
-
-    requestAnimationFrame(updatePosition);
-}
-updatePosition();

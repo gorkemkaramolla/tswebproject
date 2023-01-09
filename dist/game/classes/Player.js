@@ -22,6 +22,23 @@ var Player = /** @class */ (function (_super) {
             imageSrc: params.imageSrc,
             frameRate: params.frameRate
         }) || this;
+        _this.level = 0;
+        _this.keys = {
+            d: {
+                pressed: false
+            },
+            a: {
+                pressed: false
+            },
+            space: {
+                pressed: false,
+                numberOfJumps: 0
+            },
+            shift: {
+                pressed: false,
+                numberOfDashes: 0
+            }
+        };
         _this.playerIsDeath = false;
         _this.deathAnimationPlayed = false;
         _this.updateCameraBox = function () {
@@ -39,10 +56,22 @@ var Player = /** @class */ (function (_super) {
             c.fillRect(player.cameraBox.position.x, player.cameraBox.position.y, player.cameraBox.width, player.cameraBox.height);
         };
         _this.shouldPlatformMoveLeft = function () {
+            if (Math.abs(camera.position.x) + player.hitbox.position.x >
+                newColliderData[0].length * 32 - 50 &&
+                _this.level !== 1) {
+                _this.velocity.x = 0;
+                game.level = 1;
+                _this.level = 1;
+                setTimeout(function () {
+                    gameOver = true;
+                }, 3000);
+            }
+            if (_this.level === 1)
+                return;
             var playerHitboxX = player.hitbox.position.x + player.hitbox.width;
             var canvasWidth = canvas.width;
             // Check if the player's hitbox position is within the boundaries of the map
-            if (playerHitboxX > 66 && playerHitboxX < 2048) {
+            if (playerHitboxX < 2048) {
                 if (playerHitboxX <= canvasWidth / 2) {
                     // Move the player
                     player.velocity.x = 1;
@@ -117,28 +146,28 @@ var Player = /** @class */ (function (_super) {
         // check horizontal distance between player and AI
         if (player.hitbox.position.x < player2.hitbox.position.x &&
             !player2.playerIsDeath) {
-            player2.velocity.x = -1.5; // move left
+            player2.velocity.x = -1; // move left
         }
         else if (player.hitbox.position.x > player2.hitbox.position.x) {
-            player2.velocity.x = 1.5; // move right
+            player2.velocity.x = 1; // move right
         }
         else {
             player2.velocity.x = 0; // don't move horizontally
         }
+        // check if the player is within a certain distance of the AI on the x-axis
+        var xDistance = Math.abs(player.hitbox.position.x - player2.hitbox.position.x);
         // check vertical distance between player and AI
         if (player.hitbox.position.y < player2.hitbox.position.y) {
-            player2.velocity.y = 0; // don't move vertically
-            player2.velocity.x = 0;
+            if (player2.numberOfJumps < 1 && player2.velocity.y < 0.5) {
+                jumpMusic.play();
+                player2.velocity.y = -4;
+                player2.numberOfJumps++; // 0 dı 1 oldu zıpladı
+            }
+            player2.keys.space.pressed = false; // Ignore further jump inputs
         }
+        // check if the player is within a certain distance of the AI on the y-axis
+        var yDistance = Math.abs(player.hitbox.position.y - player2.hitbox.position.y);
         // check for collision between player and AI hitboxes
-        if (this.checkCollision(player.hitbox, player2.hitbox)) {
-            if (player.playerAttack) {
-                player2.health = 0; // attack enemy
-            }
-            else {
-                player.health = 0; // player dies
-            }
-        }
     };
     Player.prototype.checkCollision = function (hitbox1, hitbox2) {
         // check if hitboxes overlap
@@ -176,7 +205,8 @@ var Player = /** @class */ (function (_super) {
         for (var i = 0; i < this.collisionblocks.length; i++) {
             var collisionBlock = this.collisionblocks[i];
             if (this.checkCollision(collisionBlock, this.hitbox)) {
-                if (game.keys.d.pressed && !player.playerIsDeath) {
+                if ((this.keys.d.pressed && !this.playerIsDeath) ||
+                    (this.velocity.x > 0 && !this.playerIsDeath)) {
                     this.velocity.x = 0;
                     var offset = this.hitbox.position.x -
                         this.position.x +
@@ -185,7 +215,8 @@ var Player = /** @class */ (function (_super) {
                     console.log(collisionBlock.position.x - offset - 0.01);
                     break;
                 }
-                if (game.keys.a.pressed && !player.playerIsDeath) {
+                if ((this.keys.a.pressed && !this.playerIsDeath) ||
+                    (this.velocity.x < 0 && !this.playerIsDeath)) {
                     this.velocity.x = 0;
                     var offset = this.hitbox.position.x - this.position.x;
                     this.position.x =

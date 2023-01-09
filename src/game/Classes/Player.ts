@@ -1,6 +1,22 @@
 class Player extends Sprite {
+    level = 0;
     counter: number;
-
+    keys = {
+        d: {
+            pressed: false,
+        },
+        a: {
+            pressed: false,
+        },
+        space: {
+            pressed: false,
+            numberOfJumps: 0,
+        },
+        shift: {
+            pressed: false,
+            numberOfDashes: 0,
+        },
+    };
     position: { x: number; y: number };
     numberOfJumps: number;
     velocity: { x: number; y: number };
@@ -104,10 +120,25 @@ class Player extends Sprite {
     };
 
     shouldPlatformMoveLeft = () => {
+        if (
+            Math.abs(camera.position.x) + player.hitbox.position.x >
+                newColliderData[0].length * 32 - 50 &&
+            this.level !== 1
+        ) {
+            this.velocity.x = 0;
+
+            game.level = 1;
+            this.level = 1;
+
+            setTimeout(() => {
+                gameOver = true;
+            }, 3000);
+        }
+        if (this.level === 1) return;
         const playerHitboxX = player.hitbox.position.x + player.hitbox.width;
         const canvasWidth = canvas.width;
         // Check if the player's hitbox position is within the boundaries of the map
-        if (playerHitboxX > 66 && playerHitboxX < 2048) {
+        if (playerHitboxX < 2048) {
             if (playerHitboxX <= canvasWidth / 2) {
                 // Move the player
                 player.velocity.x = 1;
@@ -159,34 +190,41 @@ class Player extends Sprite {
         });
         player2.position.x += movement;
     };
-
     enemyAIMovement() {
         // check horizontal distance between player and AI
         if (
             player.hitbox.position.x < player2.hitbox.position.x &&
             !player2.playerIsDeath
         ) {
-            player2.velocity.x = -1.5; // move left
+            player2.velocity.x = -1; // move left
         } else if (player.hitbox.position.x > player2.hitbox.position.x) {
-            player2.velocity.x = 1.5; // move right
+            player2.velocity.x = 1; // move right
         } else {
             player2.velocity.x = 0; // don't move horizontally
         }
 
+        // check if the player is within a certain distance of the AI on the x-axis
+        const xDistance = Math.abs(
+            player.hitbox.position.x - player2.hitbox.position.x
+        );
+
         // check vertical distance between player and AI
         if (player.hitbox.position.y < player2.hitbox.position.y) {
-            player2.velocity.y = 0; // don't move vertically
-            player2.velocity.x = 0;
+            if (player2.numberOfJumps < 1 && player2.velocity.y < 0.5) {
+                jumpMusic.play();
+                player2.velocity.y = -4;
+
+                player2.numberOfJumps++; // 0 dı 1 oldu zıpladı
+            }
+            player2.keys.space.pressed = false; // Ignore further jump inputs
         }
 
+        // check if the player is within a certain distance of the AI on the y-axis
+        const yDistance = Math.abs(
+            player.hitbox.position.y - player2.hitbox.position.y
+        );
+
         // check for collision between player and AI hitboxes
-        if (this.checkCollision(player.hitbox, player2.hitbox)) {
-            if (player.playerAttack) {
-                player2.health = 0; // attack enemy
-            } else {
-                player.health = 0; // player dies
-            }
-        }
     }
 
     checkCollision(hitbox1, hitbox2) {
@@ -239,7 +277,10 @@ class Player extends Sprite {
             const collisionBlock = this.collisionblocks[i];
 
             if (this.checkCollision(collisionBlock, this.hitbox)) {
-                if (game.keys.d.pressed && !player.playerIsDeath) {
+                if (
+                    (this.keys.d.pressed && !this.playerIsDeath) ||
+                    (this.velocity.x > 0 && !this.playerIsDeath)
+                ) {
                     this.velocity.x = 0;
 
                     const offset =
@@ -252,7 +293,10 @@ class Player extends Sprite {
                     break;
                 }
 
-                if (game.keys.a.pressed && !player.playerIsDeath) {
+                if (
+                    (this.keys.a.pressed && !this.playerIsDeath) ||
+                    (this.velocity.x < 0 && !this.playerIsDeath)
+                ) {
                     this.velocity.x = 0;
 
                     const offset = this.hitbox.position.x - this.position.x;

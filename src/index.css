@@ -1,115 +1,89 @@
-* {
-    box-sizing: border-box;
-    cursor: none;
+.wrapper {
+    background-color: #c38d9e;
+    width: 100vw;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
-.animation-container {
-    cursor: none;
-    width: 100%;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-}
-.item {
-    cursor: none;
-    pointer-events: none;
-    transition: position cubic-bezier(0.5, 0, 0.5, 1) 4s;
-    font-weight: 1000;
-    margin: 0;
-    font-family: fantasy;
-    padding: 0;
-    position: absolute;
-}
-.monster {
-    width: 36px;
-    height: 36px;
-}
-body {
-    margin: 0px;
-    font-family: "segoe ui";
+.grid-1 {
+    background-color: rgb(236, 209, 209);
+    width: 100vw;
+    color: white;
+    height: 40vh;
+    display: flex;
+    justify-content: space-evenly;
 }
 
-.nav {
-    height: 50px;
-    width: 100%;
-    background-color: #4d4d4d;
+.grid1-1 {
+    width: 32vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
+    z-index: 1;
+    padding-bottom: 5px;
+}
+.game-image {
+    aspect-ratio: 1/1;
+    height: 90%;
+    width: 90%;
+    opacity: 0.9;
+    /* transition: min-width 1s ease-out 100ms; */
+    transition: display 1s, width 1s, height 1s, background-color 1s,
+        transform 1s;
+    z-index: 0;
+    object-fit: contain;
+}
+.play-btn {
+    position: absolute;
+    opacity: 0;
+    top: 50%;
+    width: 15%;
+    height: 50px;
+    left: 50%;
+    background-color: crimson;
+    border-radius: 20px;
+    z-index: 3;
+    transform: translate(-50%, -50%);
+    transition: opacity 1s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid whitesmoke;
+    text-align: center;
 }
 
-.nav > .nav-header {
-    display: inline;
+.grid1-1:hover div.play-btn {
+    opacity: 1;
+    cursor: pointer;
+}
+.grid1-1:hover img.game-image {
+    opacity: 1;
+    width: 100%;
+    height: 100%;
 }
 
-.nav > .nav-header > .nav-title {
-    display: inline-block;
-    font-size: 22px;
-    color: #fff;
-    padding: 10px 10px 10px 10px;
+.grid-2 {
+    background-color: rgb(115, 115, 207);
+    width: 100vw;
+    color: white;
+    height: 30vh;
+}
+.grid-3 {
+    background-color: rgb(185, 185, 240);
+    width: 100vw;
+    color: red;
+    height: 20vh;
+}
+.grid-4 {
+    background-color: rgb(214, 224, 152);
+    width: 100vw;
+    color: red;
+    height: 60vh;
 }
 
-.nav > .nav-btn {
-    display: none;
-    float: left;
-}
-
-.nav > .nav-links {
-    display: inline;
-    float: right;
-    font-size: 18px;
-}
-
-.nav > .nav-links > a {
-    display: inline-block;
-    padding: 13px 10px;
-    text-decoration: none;
-    color: #efefef;
-}
-
-.nav > .nav-links > a:hover {
-    background-color: rgba(0, 0, 0, 0.3);
-}
-
-.nav > #nav-check {
-    display: none;
-}
-
-@media (max-width: 600px) {
-    .nav > .nav-btn {
-        display: block;
-    }
-    .nav > .nav-btn > label {
-        display: inline-block;
-        width: 50px;
-        height: 50px;
-        padding: 13px;
-    }
-    .nav > .nav-btn > label:hover,
-    .nav #nav-check:checked ~ .nav-btn > label {
-        background-color: rgba(0, 0, 0, 0.3);
-    }
-    .nav > .nav-btn > label > span {
-        display: block;
-        width: 25px;
-        height: 10px;
-        border-top: 2px solid #eee;
-    }
-    .nav > .nav-links {
-        position: absolute;
-        display: block;
-        width: 100%;
-        background-color: #333;
-        transition: all 0.3s ease-in;
-        overflow-y: hidden;
-        top: 50px;
-        left: 0px;
-    }
-    .nav > .nav-links > a {
-        display: block;
-        width: 100%;
-    }
-    .nav > #nav-check:not(:checked) ~ .nav-links {
-        height: 0px;
-    }
-    .nav > #nav-check:checked ~ .nav-links {
-        overflow-y: auto;
-    }
+* {
+    margin: 0;
+    padding: 0;
+    border: none;
 }

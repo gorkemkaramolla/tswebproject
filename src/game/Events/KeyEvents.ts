@@ -5,18 +5,18 @@ function keyEvents() {
         canvas.addEventListener("keydown", (e) => {
             switch (e.key) {
                 case "d": {
-                    game.keys.d.pressed = true;
+                    player.keys.d.pressed = true;
                     break;
                 }
                 case "a": {
-                    game.keys.a.pressed = true;
+                    player.keys.a.pressed = true;
 
                     break;
                 }
                 case " ": {
-                    game.keys.space.pressed = true;
+                    player.keys.space.pressed = true;
                     if (
-                        game.keys.space.numberOfJumps === 0 ||
+                        player.keys.space.numberOfJumps === 0 ||
                         player.velocity.y < 0.02
                     ) {
                         // Reset the number of jumps if the player is on the ground
@@ -24,7 +24,7 @@ function keyEvents() {
                     break;
                 }
                 case "Shift": {
-                    game.keys.shift.pressed = true;
+                    player.keys.shift.pressed = true;
                     player.lastDirection === "right"
                         ? (player.position.x += 50)
                         : (player.position.x -= 50);
@@ -45,12 +45,12 @@ function keyEvents() {
                         keyIsPressed = true;
                     }
 
-                    if (
-                        player2.hitbox.position.x - 50 <
-                        player.hitbox.position.x + player.hitbox.width
-                    ) {
-                        player2.health -= 100;
-                    }
+                    // if (
+                    //     player2.hitbox.position.x - 50 <
+                    //     player.hitbox.position.x + player.hitbox.width
+                    // ) {
+                    //     player2.health -= 100;
+                    // }
 
                     break;
                 }
@@ -63,11 +63,11 @@ function keyEvents() {
         canvas.addEventListener("keyup", (e) => {
             switch (e.key) {
                 case "d": {
-                    game.keys.d.pressed = false;
+                    player.keys.d.pressed = false;
                     break;
                 }
                 case "a": {
-                    game.keys.a.pressed = false;
+                    player.keys.a.pressed = false;
 
                     break;
                 }

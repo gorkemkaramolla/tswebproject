@@ -5,6 +5,7 @@ var gameLooping = false;
 var attackCount = 0;
 var init = function () {
     currentframes = 0;
+    console.log(gameOver);
     camera = {
         position: {
             x: 0,
@@ -22,24 +23,39 @@ var init = function () {
     canvas.width = 1024;
     canvas.height = 576;
     animationFrameID = 0;
-    colliderBlocks = newColliderData
-        .flatMap(function (row, y) {
-        return row.map(function (col, x) {
-            if (col !== -1) {
-                return new CollisionBlock({
-                    position: { x: x * 32, y: y * 32 },
-                    imageSrc: images[col]
-                });
-            }
-        });
-    })
-        .filter(function (block) { return block !== undefined; });
+    if (game.level === 0) {
+        colliderBlocks = newColliderData
+            .flatMap(function (row, y) {
+            return row.map(function (col, x) {
+                if (col !== -1) {
+                    return new CollisionBlock({
+                        position: { x: x * 32, y: y * 32 },
+                        imageSrc: images[col]
+                    });
+                }
+            });
+        })
+            .filter(function (block) { return block !== undefined; });
+    }
+    else {
+        colliderBlocks = level2
+            .flatMap(function (row, y) {
+            return row.map(function (col, x) {
+                if (col !== -1) {
+                    return new CollisionBlock({
+                        position: { x: x * 32, y: y * 32 },
+                        imageSrc: images[col]
+                    });
+                }
+            });
+        })
+            .filter(function (block) { return block !== undefined; });
+    }
     //NON COLLIDER GROUND DATA 36 columns X 27 rows
     //LOOPIN THROUGH THE 2D ARRAY ON CONDITION IF THERE IS A NON 0 VALUE THAT MEANS THERE IS A GROUND WITH A COLLIDER AND RETURN A NEW BLOCK
     //GAME UPDATE LOOP
     gravity = 0.05;
     yAxes = 100;
-    game = new GameFeatures();
     //NEW PLAYER
     player = new Player({
         position: {
@@ -141,7 +157,10 @@ var init = function () {
         typeOfPlayer: "player"
     });
     player2 = new Player({
-        position: { x: 1900, y: canvas.height - 250 },
+        position: {
+            x: 2000,
+            y: colliderBlocks[0].position.y
+        },
         colliderBlocks: colliderBlocks,
         scale: 1.5,
         imageSrc: "./Sprites/Enemy/Idle.png",
@@ -221,6 +240,7 @@ var colliderBlocks = newColliderData
     });
 })
     .filter(function (block) { return block !== undefined; });
+console.log(colliderBlocks);
 //NON COLLIDER GROUND DATA 36 columns X 27 rows
 //LOOPIN THROUGH THE 2D ARRAY ON CONDITION IF THERE IS A NON 0 VALUE THAT MEANS THERE IS A GROUND WITH A COLLIDER AND RETURN A NEW BLOCK
 //GAME UPDATE LOOP
@@ -309,7 +329,10 @@ var player = new Player({
     typeOfPlayer: "player"
 });
 var player2 = new Player({
-    position: { x: 1900, y: canvas.height - 250 },
+    position: {
+        x: colliderBlocks[14].position.x,
+        y: colliderBlocks[14].position.y
+    },
     colliderBlocks: colliderBlocks,
     scale: 1.5,
     imageSrc: "./Sprites/Enemy/Idle.png",
@@ -393,13 +416,13 @@ function gameLoop() {
         player.velocity.x = 0;
         player.position.x = player.position.x - player.hitbox.width;
     }
-    if (game.keys.space.pressed) {
+    if (player.keys.space.pressed) {
         if (player.numberOfJumps < 1 && player.velocity.y < 0.5) {
             jumpMusic.play();
             player.velocity.y = -4;
             player.numberOfJumps++; // 0 dı 1 oldu zıpladı
         }
-        game.keys.space.pressed = false; // Ignore further jump inputs
+        player.keys.space.pressed = false; // Ignore further jump inputs
     }
     c.fillStyle = "#FC9C54";
     var background = new Image();
@@ -430,13 +453,13 @@ function gameLoop() {
                 player.swapSprite("Attack3Left");
         }
     }
-    if (game.keys.d.pressed && !player.playerIsDeath) {
+    if (player.keys.d.pressed && !player.playerIsDeath) {
         player.lastDirection = "right";
         if (!player.playerAttack)
             player.swapSprite("Run");
         player.shouldPlatformMoveLeft();
     }
-    else if (game.keys.a.pressed && !player.playerIsDeath) {
+    else if (player.keys.a.pressed && !player.playerIsDeath) {
         player.lastDirection = "left";
         if (!player.playerAttack)
             player.swapSprite("RunLeft");
@@ -470,8 +493,8 @@ function gameLoop() {
         }
     }
     c.restore();
-    // player2.enemyAIMovement();
     player.update();
+    player2.enemyAIMovement();
     //PLAYER2 ANIMATIONS
     if (player2.deathAnimationPlayed === false) {
         player2.update();
@@ -502,19 +525,38 @@ function gameLoop() {
         player2.swapSprite("Death");
     }
     else {
-        if (player2.velocity.x === -2) {
+        if (player2.velocity.x < 0) {
+            player2.lastDirection = "left";
             player2.swapSprite("RunLeft");
         }
-        else if (player2.velocity.x === 2) {
+        else if (player2.velocity.x > 0) {
+            player2.lastDirection = "right";
             player2.swapSprite("Run");
         }
         else {
-            player2.swapSprite("Idle");
+            if (player2.lastDirection === "right")
+                player2.swapSprite("Idle");
+            else
+                player2.swapSprite("IdleLeft");
         }
     }
     if (gameOver) {
         backgroundMusic.pause();
         mainMenu();
+    }
+    if (player.level === 1) {
+        var gradient = c.createLinearGradient(0, 0, canvas.width, 0);
+        gradient.addColorStop(0, "white");
+        gradient.addColorStop(0.5, "whitesmoke");
+        gradient.addColorStop(1, "purple");
+        c.font = "36px Georgia";
+        c.fillStyle = gradient;
+        c.fillText("You Won!", 300, 100);
+        c.font = "36px Verdana";
+        // Create gradient
+        // Fill with gradient
+        c.fillStyle = gradient;
+        c.fillText("Big smile!", 300, 200);
     }
     gameOver !== true ? window.requestAnimationFrame(gameLoop) : null;
 }
