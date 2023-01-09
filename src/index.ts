@@ -1,4 +1,4 @@
-const gamesList = ["sausageflip", "SubwaySurfer", "monkeys", "boom"];
+const gamesList = ["skifree", "SubwaySurfer", "monkeys", "boom"];
 const container = document.querySelectorAll(".grid1-1");
 
 container.forEach((item, i) => {

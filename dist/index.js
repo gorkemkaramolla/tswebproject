@@ -1,4 +1,4 @@
-var gamesList = ["sausageflip", "SubwaySurfer", "monkeys", "boom"];
+var gamesList = ["skifree", "SubwaySurfer", "monkeys", "boom"];
 var container = document.querySelectorAll(".grid1-1");
 container.forEach(function (item, i) {
     var playBtn = document.createElement("div");
