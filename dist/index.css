@@ -72,10 +72,68 @@
     height: 20vh;
 }
 .grid-4 {
-    background-color: rgb(214, 224, 152);
+    background-color: #ffffe0;
     width: 95vw;
     color: red;
-    height: 60vh;
+    height: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    display: flex;
+    align-items: center;
+}
+.game-icon {
+    width: 400px;
+
+    height: 400px;
+    background-color: #00b8d4;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 20px;
+    border-radius: 30px;
+}
+.game-icon-h3 {
+    font-family: "Papyrus", sans-serif;
+    font-size: 24px;
+    color: #e0e0f7;
+
+    text-align: center;
+    width: 100%;
+}
+.game-icon-image {
+    aspect-ratio: 1/1;
+    height: 80%;
+    width: 80%;
+    opacity: 0.9;
+    /* transition: min-width 1s ease-out 100ms; */
+    transition: display 1s, width 1s, height 1s, background-color 1s,
+        transform 1s;
+    z-index: 0;
+    object-fit: cover;
+}
+.game-icon-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: all 0.2s;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    transition: all 0.2s;
+}
+.game-icon-link:hover {
+    color: #f7ccd9;
+    background-color: #0052cc;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
 }
 
 * {
@@ -85,6 +143,8 @@
     color: aliceblue;
 }
 body {
+    font-family: "Papyrus", sans-serif;
+
     overflow-x: hidden;
     display: flex;
     justify-content: center;
