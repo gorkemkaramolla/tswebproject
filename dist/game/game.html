@@ -3,24 +3,35 @@
     <head>
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <link rel="stylesheet" href="../games/games.css" />
         <link rel="stylesheet" href="game.css" />
+        <link rel="stylesheet" href="../index.css" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
     </head>
     <body>
-        <div
-            style="
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                width: 100vw;
-                height: 100vh;
-            "
-        >
+        <div class="wrapper">
+            <nav>
+                <li class="brand">
+                    <a href="../index.html" class="brand-name">KRAL OYUN</a>
+                </li>
+                <li class="nav-item">
+                    <a href="" class="nav-link">Oyunlar</a>
+                </li>
+                <li class="nav-item">
+                    <a href="" class="nav-link">Haberler</a>
+                </li>
+            </nav>
+            <div class="grid-game">
+                <canvas tabindex="1">
+                    <button onclick="" id="start-button">Start asgame</button>
+                </canvas>
+            </div>
             <canvas tabindex="1">
                 <button onclick="" id="start-button">Start asgame</button>
             </canvas>
         </div>
+        <script src="../games/games.js"></script>
         <script src="./Musics/Musics.js"></script>
         <script src="./util/util.js"></script>
 
