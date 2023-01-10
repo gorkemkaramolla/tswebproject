@@ -8,6 +8,14 @@ let gameLooping = false;
 let attackCount = 0;
 
 const init = () => {
+    gameLooping = true;
+    c.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (game.level === 2) {
+        game.level = 0;
+    }
+    player2.playerIsDeath = false;
+
     currentframes = 0;
     console.log(gameOver);
 
@@ -23,7 +31,6 @@ const init = () => {
             y: camera.position.y,
         },
     };
-    gameLooping = false;
     canvas.focus();
     canvas.width = 1024;
     canvas.height = 576;
@@ -166,10 +173,9 @@ const init = () => {
         },
         typeOfPlayer: "player",
     });
-
     player2 = new Player({
         position: {
-            x: 2000,
+            x: 0,
             y: colliderBlocks[0].position.y,
         },
         colliderBlocks,
@@ -508,22 +514,30 @@ function gameLoop() {
 
     c.restore();
     player.update();
-    player2.enemyAIMovement();
+    // player2.enemyAIMovement();
 
     //PLAYER2 ANIMATIONS
 
     if (player2.deathAnimationPlayed === false) {
-        player2.update();
+        // player2.update();
     }
 
     player.updateCameraBox();
 
     if (player.hitbox.position.y > canvas.height + 300) {
-        gameOver = true;
+        backgroundMusic.pause();
+        overMp3.play();
+        if (player.hitbox.position.y > canvas.height + 1300) {
+            gameOver = true;
+            player.hitbox.position.y = 0;
+            player.velocity.x = 0;
+            player.velocity.y = 0;
+        }
+    }
+    if (gameOver) {
+        backgroundMusic.pause();
 
-        player.hitbox.position.y = 0;
-        player.velocity.x = 0;
-        player.velocity.y = 0;
+        mainMenu();
     }
     //PLAYER1
     if (player.health <= 0) {
@@ -555,12 +569,8 @@ function gameLoop() {
             else player2.swapSprite("IdleLeft");
         }
     }
-    if (gameOver) {
-        backgroundMusic.pause();
 
-        mainMenu();
-    }
-    if (player.level === 1) {
+    if (game.textLevel === 1 && !gameLooping) {
         var gradient = c.createLinearGradient(0, 0, canvas.width, 0);
         gradient.addColorStop(0, "white");
         gradient.addColorStop(0.5, "whitesmoke");
@@ -568,16 +578,35 @@ function gameLoop() {
         c.font = "36px Georgia";
         c.fillStyle = gradient;
 
-        c.fillText("You Won!", 300, 100);
+        c.fillText("You Won!", 420, 250);
 
         c.font = "36px Verdana";
         // Create gradient
 
         // Fill with gradient
         c.fillStyle = gradient;
-        c.fillText("Big smile!", 300, 200);
+        c.fillText("Big smile!", 420, 350);
     }
-    gameOver !== true ? window.requestAnimationFrame(gameLoop) : null;
+    if (game.textLevel === 2 && !gameLooping) {
+        var gradient = c.createLinearGradient(0, 0, canvas.width, 0);
+        gradient.addColorStop(0, "white");
+        gradient.addColorStop(0.5, "whitesmoke");
+        gradient.addColorStop(1, "purple");
+        c.font = "36px Georgia";
+        c.fillStyle = gradient;
+
+        c.fillText("YOU FINISHED THE GAME!", 420, 250);
+
+        c.font = "36px Verdana";
+        // Create gradient
+
+        // Fill with gradient
+        c.fillStyle = gradient;
+        c.fillText("WOOOOOOOOOOW!", 420, 350);
+    }
+    gameOver !== true && gameLooping
+        ? window.requestAnimationFrame(gameLoop)
+        : null;
 }
 
 function startGame() {

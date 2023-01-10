@@ -85,7 +85,7 @@ gamesList.map(function (item) {
     game.classList.add("game-icon");
     var link = document.createElement("a");
     link.classList.add("game-icon-link");
-    link.innerHTML = "play";
+    link.innerHTML = "Play the Game";
     link.href = "./games/".concat(item.game);
     game.appendChild(link);
     allGames.appendChild(game);

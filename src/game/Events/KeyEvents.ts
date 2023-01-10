@@ -28,6 +28,8 @@ function keyEvents() {
                     player.lastDirection === "right"
                         ? (player.position.x += 50)
                         : (player.position.x -= 50);
+                    console.log(player.position.x);
+
                     break;
                 }
                 case "x": {

@@ -1,4 +1,5 @@
 class GameFeatures {
+    textLevel = 0;
     level = 0;
     keys = {
         d: {

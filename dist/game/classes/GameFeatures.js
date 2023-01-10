@@ -1,5 +1,6 @@
 var GameFeatures = /** @class */ (function () {
     function GameFeatures() {
+        this.textLevel = 0;
         this.level = 0;
         this.keys = {
             d: {

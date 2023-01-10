@@ -1,5 +1,8 @@
 var mainMenu = function () {
     if (game.level === 1) {
+        c.clearRect(0, 0, canvas.width, canvas.height);
+        c.clearRect(0, 0, canvas.width, canvas.height);
+        c.clearRect(0, 0, canvas.width, canvas.height);
         backgroundMusic.autoplay = true;
         backgroundMusic.currentTime = 0;
         backgroundMusic.play();
@@ -9,7 +12,6 @@ var mainMenu = function () {
         init();
     }
     else {
-        gameLooping = false;
         c.fillStyle = "black";
         c.clearRect(0, 0, canvas.width, canvas.height);
         c.clearRect(0, 0, canvas.width, canvas.height);

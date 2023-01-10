@@ -126,15 +126,44 @@ class Player extends Sprite {
             this.level !== 1
         ) {
             this.velocity.x = 0;
+            if (game.textLevel === 0) {
+                backgroundMusic.pause();
 
-            game.level = 1;
-            this.level = 1;
+                nice.play();
 
-            setTimeout(() => {
-                gameOver = true;
-            }, 3000);
+                gameLooping = false;
+                game.textLevel = 1;
+                this.level = 1;
+                game.level = 1;
+                setTimeout(() => {
+                    gameOver = true;
+                    c.clearRect(0, 0, canvasWidth, canvas.height);
+                    gameLooping = true;
+                    gameLoop();
+                }, 4000);
+                return;
+            }
+
+            if (game.textLevel === 1) {
+                gameLooping = false;
+                backgroundMusic.pause();
+                nice.play();
+                clap.play();
+
+                game.textLevel = 2;
+                this.level = 2;
+                game.level = 2;
+                setTimeout(() => {
+                    gameOver = true;
+                    c.clearRect(0, 0, canvasWidth, canvas.height);
+                    gameLooping = true;
+                    mainMenu();
+                }, 4000);
+                return;
+            }
+            console.log(this.level);
         }
-        if (this.level === 1) return;
+        if (this.level === 1 || this.level === 2) return;
         const playerHitboxX = player.hitbox.position.x + player.hitbox.width;
         const canvasWidth = canvas.width;
         // Check if the player's hitbox position is within the boundaries of the map
@@ -289,7 +318,6 @@ class Player extends Sprite {
                         this.hitbox.width;
 
                     this.position.x = collisionBlock.position.x - offset - 0.01;
-                    console.log(collisionBlock.position.x - offset - 0.01);
                     break;
                 }
 
@@ -306,12 +334,6 @@ class Player extends Sprite {
                         collisionBlock.width -
                         offset +
                         0.01;
-                    console.log(
-                        collisionBlock.position.x +
-                            collisionBlock.width -
-                            offset +
-                            0.01
-                    );
 
                     break;
                 }

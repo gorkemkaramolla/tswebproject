@@ -97,7 +97,7 @@ gamesList.map((item) => {
     game.classList.add("game-icon");
     const link = document.createElement("a");
     link.classList.add("game-icon-link");
-    link.innerHTML = "play";
+    link.innerHTML = "Play the Game";
     link.href = `./games/${item.game}`;
     game.appendChild(link);
     allGames.appendChild(game);

@@ -60,13 +60,40 @@ var Player = /** @class */ (function (_super) {
                 newColliderData[0].length * 32 - 50 &&
                 _this.level !== 1) {
                 _this.velocity.x = 0;
-                game.level = 1;
-                _this.level = 1;
-                setTimeout(function () {
-                    gameOver = true;
-                }, 3000);
+                if (game.textLevel === 0) {
+                    backgroundMusic.pause();
+                    nice.play();
+                    gameLooping = false;
+                    game.textLevel = 1;
+                    _this.level = 1;
+                    game.level = 1;
+                    setTimeout(function () {
+                        gameOver = true;
+                        c.clearRect(0, 0, canvasWidth, canvas.height);
+                        gameLooping = true;
+                        gameLoop();
+                    }, 4000);
+                    return;
+                }
+                if (game.textLevel === 1) {
+                    gameLooping = false;
+                    backgroundMusic.pause();
+                    nice.play();
+                    clap.play();
+                    game.textLevel = 2;
+                    _this.level = 2;
+                    game.level = 2;
+                    setTimeout(function () {
+                        gameOver = true;
+                        c.clearRect(0, 0, canvasWidth, canvas.height);
+                        gameLooping = true;
+                        mainMenu();
+                    }, 4000);
+                    return;
+                }
+                console.log(_this.level);
             }
-            if (_this.level === 1)
+            if (_this.level === 1 || _this.level === 2)
                 return;
             var playerHitboxX = player.hitbox.position.x + player.hitbox.width;
             var canvasWidth = canvas.width;
@@ -212,7 +239,6 @@ var Player = /** @class */ (function (_super) {
                         this.position.x +
                         this.hitbox.width;
                     this.position.x = collisionBlock.position.x - offset - 0.01;
-                    console.log(collisionBlock.position.x - offset - 0.01);
                     break;
                 }
                 if ((this.keys.a.pressed && !this.playerIsDeath) ||
@@ -224,10 +250,6 @@ var Player = /** @class */ (function (_super) {
                             collisionBlock.width -
                             offset +
                             0.01;
-                    console.log(collisionBlock.position.x +
-                        collisionBlock.width -
-                        offset +
-                        0.01);
                     break;
                 }
             }
