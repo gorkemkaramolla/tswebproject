@@ -1,3 +1,7 @@
+const spinner: HTMLDivElement = document.querySelector(".spinner");
+const wrapper: HTMLDivElement = document.querySelector(".wrapper");
+const linkElements = document.querySelectorAll("a");
+
 const gamesList = [
     {
         name: "Gorkem's Special ~The King~",
@@ -98,3 +102,23 @@ gamesList.map((item) => {
     game.appendChild(link);
     allGames.appendChild(game);
 });
+
+function displayxSpinner() {
+    // Hide the content and display the spinner after a delay
+    wrapper.style.display = "none";
+    spinner.style.display = "block";
+}
+
+const hidexSpinner = () => {
+    // Hide the spinner and display the content
+    spinner.style.display = "none";
+    wrapper.style.display = "block";
+};
+
+displayxSpinner();
+window.onload = () => {
+    setTimeout(() => {
+        wrapper.style.display = "flex";
+        hidexSpinner();
+    }, 500);
+};

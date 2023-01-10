@@ -1,3 +1,6 @@
+var spinner = document.querySelector(".spinner");
+var wrapper = document.querySelector(".wrapper");
+var linkElements = document.querySelectorAll("a");
 var gamesList = [
     {
         name: "Gorkem's Special ~The King~",
@@ -87,4 +90,21 @@ gamesList.map(function (item) {
     game.appendChild(link);
     allGames.appendChild(game);
 });
+function displayxSpinner() {
+    // Hide the content and display the spinner after a delay
+    wrapper.style.display = "none";
+    spinner.style.display = "block";
+}
+var hidexSpinner = function () {
+    // Hide the spinner and display the content
+    spinner.style.display = "none";
+    wrapper.style.display = "block";
+};
+displayxSpinner();
+window.onload = function () {
+    setTimeout(function () {
+        wrapper.style.display = "flex";
+        hidexSpinner();
+    }, 500);
+};
 //# sourceMappingURL=index.js.map
