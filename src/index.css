@@ -12,9 +12,9 @@
     background-color: rgb(236, 209, 209);
     width: 95vw;
     color: white;
-    height: 50vh;
+    height: 40vh;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
 
 .grid1-1 {
@@ -29,8 +29,8 @@
 }
 .game-image {
     aspect-ratio: 1/1;
-    height: 80%;
-    width: 80%;
+    height: 70%;
+    width: 70%;
     opacity: 0.9;
     /* transition: min-width 1s ease-out 100ms; */
     transition: display 1s, width 1s, height 1s, background-color 1s,
@@ -48,7 +48,7 @@
     background-color: crimson;
     border-radius: 20px;
     z-index: 3;
-    transform: translate(-50%, -10%);
+    transform: translate(-50%, -50%);
     transition: opacity 1s;
     display: flex;
     justify-content: center;
@@ -63,8 +63,8 @@
 }
 .grid1-1:hover img.game-image {
     opacity: 1;
-    width: 100%;
-    height: 90%;
+    width: 80%;
+    height: 80%;
 }
 
 .grid-2 {
@@ -84,7 +84,7 @@
     width: 95vw;
     color: red;
     height: 100%;
-    justify-content: space-between;
+    justify-content: center;
     flex-wrap: wrap;
 
     display: flex;
@@ -174,7 +174,8 @@ nav {
     align-items: center;
     justify-content: space-between;
     max-width: 95vw;
-    background-color: rgb(63, 55, 60);
+    background-color: rgb(47, 41, 225);
+
     flex-wrap: nowrap;
 }
 .nav-item {

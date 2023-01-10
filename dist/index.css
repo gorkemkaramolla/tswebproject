@@ -14,7 +14,7 @@
     color: white;
     height: 40vh;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
 
 .grid1-1 {
@@ -84,7 +84,7 @@
     width: 95vw;
     color: red;
     height: 100%;
-    justify-content: space-between;
+    justify-content: center;
     flex-wrap: wrap;
 
     display: flex;
@@ -174,7 +174,8 @@ nav {
     align-items: center;
     justify-content: space-between;
     max-width: 95vw;
-    background-color: rgb(226, 6, 134);
+    background-color: rgb(47, 41, 225);
+
     flex-wrap: nowrap;
 }
 .nav-item {
