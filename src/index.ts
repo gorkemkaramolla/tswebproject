@@ -68,12 +68,15 @@ container.forEach((item, i) => {
     const h3 = document.createElement("h3");
     h3.innerHTML = gamesList[i].name;
     h3.classList.add("game-icon-h3");
-
+    h3.style.color = "black";
     svg.appendChild(path);
     playBtn.appendChild(svg);
     playBtn.addEventListener("click", () => {
         window.location.href = `./games/${gamesList[i].game}`;
     });
+
+    // Insert the new element before the reference element
+    item.insertBefore(h3, item.firstChild);
     item.appendChild(playBtn);
 });
 
