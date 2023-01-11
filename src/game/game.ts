@@ -439,21 +439,23 @@ let prevCamera = {
 
 let player1DeathAnimationPLayed = false;
 //GAME LOOP
-let lastFrameTime = performance.now();
+let currentTime = 0;
+let lastFrameTime = 0;
+
 const desiredFPS = 60;
 const frameDuration = 1000 / 60;
 function gameLoop() {
+    currentTime = performance.now();
+
     const background = new Image();
     background.src = "../background.png";
     c.drawImage(background, 0, 0, canvas.width, canvas.height);
     colliderBlocks.forEach((collider) => {
         collider.update();
     });
-    let currentTime = performance.now();
 
     let deltaTime = currentTime - lastFrameTime;
-    gravity = 0.005 * player.browserFrame;
-    lastFrameTime = currentTime;
+    gravity = 0.0009 * player.browserFrame * deltaTime;
 
     if (player.hitbox.position.x < 1) {
         player.velocity.x = 0;
@@ -462,7 +464,7 @@ function gameLoop() {
     if (player.keys.space.pressed) {
         if (player.numberOfJumps < 1 && player.velocity.y < 0.5) {
             jumpMusic.play();
-            player.velocity.y = -0.45 * deltaTime;
+            player.velocity.y = -0.5 * deltaTime;
 
             player.numberOfJumps++; // 0 dı 1 oldu zıpladı
         }
@@ -618,6 +620,7 @@ function gameLoop() {
         c.fillStyle = gradient;
         c.fillText("WOOOOOOOOOOW!", 420, 350);
     }
+    lastFrameTime = currentTime;
 
     gameOver !== true && gameLooping
         ? window.requestAnimationFrame(gameLoop)
