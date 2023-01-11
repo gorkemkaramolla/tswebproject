@@ -445,7 +445,7 @@ function gameLoop() {
     let currentTime = performance.now();
 
     let deltaTime = currentTime - lastFrameTime;
-
+    gravity = 0.005 * deltaTime;
     lastFrameTime = currentTime;
 
     if (player.hitbox.position.x < 1) {

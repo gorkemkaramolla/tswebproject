@@ -424,6 +424,7 @@ var frameDuration = 1000 / 60;
 function gameLoop() {
     var currentTime = performance.now();
     var deltaTime = currentTime - lastFrameTime;
+    gravity = 0.005 * deltaTime;
     lastFrameTime = currentTime;
     if (player.hitbox.position.x < 1) {
         player.velocity.x = 0;
