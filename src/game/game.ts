@@ -462,7 +462,7 @@ function gameLoop() {
     if (player.keys.space.pressed) {
         if (player.numberOfJumps < 1 && player.velocity.y < 0.5) {
             jumpMusic.play();
-            player.velocity.y = -4;
+            player.velocity.y = -0.45 * deltaTime;
 
             player.numberOfJumps++; // 0 dı 1 oldu zıpladı
         }
