@@ -186,7 +186,7 @@ class Player extends Sprite {
                 }
 
                 camera.position.x -= movement * deltaTime * this.browserFrame;
-
+                console.log(this.browserFrame);
                 colliderBlocks.forEach((collider) => {
                     collider.position.x -=
                         movement * deltaTime * this.browserFrame;

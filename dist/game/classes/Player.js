@@ -114,6 +114,7 @@ var Player = /** @class */ (function (_super) {
                         movement_1 = 0;
                     }
                     camera.position.x -= movement_1 * deltaTime * _this.browserFrame;
+                    console.log(_this.browserFrame);
                     colliderBlocks.forEach(function (collider) {
                         collider.position.x -=
                             movement_1 * deltaTime * _this.browserFrame;
