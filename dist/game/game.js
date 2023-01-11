@@ -1,12 +1,5 @@
+checkUserBrowser();
 var canvas = (document.querySelector("canvas"));
-if (Object.prototype.toString.call(window.HTMLElement).indexOf("Constructor") >
-    0) {
-    // Browser is Safari
-    console.log("it is safari");
-}
-else {
-    console.log("it is not");
-}
 var c = canvas.getContext("2d");
 //COLLIDER GROUND DATA 36 cols X 27 rows
 var gameLooping = false;
@@ -606,4 +599,25 @@ function startGame() {
     init();
 }
 mainMenu();
+function checkUserBrowser() {
+    if ((navigator.userAgent.indexOf("Opera") ||
+        navigator.userAgent.indexOf("OPR")) != -1) {
+        console.log("Opera");
+    }
+    else if (navigator.userAgent.indexOf("Edg") != -1) {
+        console.log("Edge");
+    }
+    else if (navigator.userAgent.indexOf("Chrome") != -1) {
+        console.log("Chrome");
+    }
+    else if (navigator.userAgent.indexOf("Safari") != -1) {
+        console.log("Safari");
+    }
+    else if (navigator.userAgent.indexOf("Firefox") != -1) {
+        console.log("Firefox");
+    }
+    else {
+        console.log("unknown");
+    }
+}
 //# sourceMappingURL=game.js.map
