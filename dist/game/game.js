@@ -435,7 +435,7 @@ function gameLoop() {
     if (player.keys.space.pressed) {
         if (player.numberOfJumps < 1 && player.velocity.y < 0.5) {
             jumpMusic.play();
-            player.velocity.y = -4 * player.browserFrame;
+            player.velocity.y = -0.6 * deltaTime * player.browserFrame;
             player.numberOfJumps++; // 0 dı 1 oldu zıpladı
         }
         player.keys.space.pressed = false; // Ignore further jump inputs
