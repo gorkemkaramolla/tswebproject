@@ -231,6 +231,7 @@ var Player = /** @class */ (function (_super) {
     Player.prototype.checkForHorizontalCollisions = function () {
         for (var i = 0; i < this.collisionblocks.length; i++) {
             var collisionBlock = this.collisionblocks[i];
+            //s
             if (this.checkCollision(collisionBlock, this.hitbox)) {
                 if ((this.keys.d.pressed && !this.playerIsDeath) ||
                     (this.velocity.x > 0 && !this.playerIsDeath)) {

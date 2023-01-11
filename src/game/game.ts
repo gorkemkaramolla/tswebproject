@@ -1,7 +1,15 @@
 const canvas: HTMLCanvasElement = <HTMLCanvasElement>(
     document.querySelector("canvas")
 );
-
+if (
+    Object.prototype.toString.call(window.HTMLElement).indexOf("Constructor") >
+    0
+) {
+    // Browser is Safari
+    console.log("it is safari");
+} else {
+    console.log("it is not");
+}
 const c: CanvasRenderingContext2D = canvas.getContext("2d");
 //COLLIDER GROUND DATA 36 cols X 27 rows
 let gameLooping = false;
