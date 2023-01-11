@@ -23,6 +23,7 @@ var Player = /** @class */ (function (_super) {
             frameRate: params.frameRate
         }) || this;
         _this.level = 0;
+        _this.browserFrame = 1;
         _this.keys = {
             d: {
                 pressed: false
@@ -109,14 +110,15 @@ var Player = /** @class */ (function (_super) {
                     var movement_1 = playerHitboxX >= canvasWidth / 2 ? 0.2 : 0;
                     if (Math.abs(camera.position.x) >
                         newColliderData[0].length * 32 - canvasWidth) {
-                        player.velocity.x = 0.2 * deltaTime;
+                        player.velocity.x = 0.2 * deltaTime * _this.browserFrame;
                         movement_1 = 0;
                     }
-                    camera.position.x -= movement_1 * deltaTime;
+                    camera.position.x -= movement_1 * deltaTime * _this.browserFrame;
                     colliderBlocks.forEach(function (collider) {
-                        collider.position.x -= movement_1 * deltaTime;
+                        collider.position.x -=
+                            movement_1 * deltaTime * _this.browserFrame;
                     });
-                    player2.position.x -= movement_1 * deltaTime;
+                    player2.position.x -= movement_1 * deltaTime * _this.browserFrame;
                 }
             }
         };
@@ -125,7 +127,7 @@ var Player = /** @class */ (function (_super) {
             var canvasWidth = canvas.width;
             // Check if the player's hitbox position is within the boundaries of the map
             var movement = 0;
-            player.velocity.x = -0.2 * deltaTime;
+            player.velocity.x = -0.2 * deltaTime * _this.browserFrame;
             if (playerHitboxX > 0) {
                 // Check if the player's hitbox position is within the range where the player can move left
                 // Move the camera and collider blocks instead
@@ -134,15 +136,15 @@ var Player = /** @class */ (function (_super) {
                     movement = 0.2;
                     if (camera.position.x > 0) {
                         movement = 0;
-                        player.velocity.x = -0.2 * deltaTime;
+                        player.velocity.x = -0.2 * deltaTime * _this.browserFrame;
                     }
                 }
             }
             camera.position.x += movement * deltaTime;
             colliderBlocks.forEach(function (collider) {
-                collider.position.x += movement * deltaTime;
+                collider.position.x += movement * deltaTime * _this.browserFrame;
             });
-            player2.position.x += movement * deltaTime;
+            player2.position.x += movement * deltaTime * _this.browserFrame;
         };
         _this.typeOfPlayer = params.typeOfPlayer;
         _this.counter = 5;
@@ -156,6 +158,7 @@ var Player = /** @class */ (function (_super) {
             x: 0,
             y: 0
         };
+        _this.browserFrame = browserName === "Safari" ? 3.42 : 1;
         _this.animations = params.animations;
         for (var key in _this.animations) {
             var image = new Image();

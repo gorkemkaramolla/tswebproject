@@ -1,5 +1,6 @@
 class Player extends Sprite {
     level = 0;
+    browserFrame = 1;
     counter: number;
     keys = {
         d: {
@@ -85,6 +86,7 @@ class Player extends Sprite {
             x: 0,
             y: 0,
         };
+        this.browserFrame = browserName === "Safari" ? 3.42 : 1;
         this.animations = params.animations;
         for (let key in this.animations) {
             const image = new Image();
@@ -179,16 +181,17 @@ class Player extends Sprite {
                     Math.abs(camera.position.x) >
                     newColliderData[0].length * 32 - canvasWidth
                 ) {
-                    player.velocity.x = 0.2 * deltaTime;
+                    player.velocity.x = 0.2 * deltaTime * this.browserFrame;
                     movement = 0;
                 }
 
-                camera.position.x -= movement * deltaTime;
+                camera.position.x -= movement * deltaTime * this.browserFrame;
 
                 colliderBlocks.forEach((collider) => {
-                    collider.position.x -= movement * deltaTime;
+                    collider.position.x -=
+                        movement * deltaTime * this.browserFrame;
                 });
-                player2.position.x -= movement * deltaTime;
+                player2.position.x -= movement * deltaTime * this.browserFrame;
             }
         }
     };
@@ -198,7 +201,7 @@ class Player extends Sprite {
         const canvasWidth = canvas.width;
         // Check if the player's hitbox position is within the boundaries of the map
         let movement = 0;
-        player.velocity.x = -0.2 * deltaTime;
+        player.velocity.x = -0.2 * deltaTime * this.browserFrame;
 
         if (playerHitboxX > 0) {
             // Check if the player's hitbox position is within the range where the player can move left
@@ -209,15 +212,15 @@ class Player extends Sprite {
                 movement = 0.2;
                 if (camera.position.x > 0) {
                     movement = 0;
-                    player.velocity.x = -0.2 * deltaTime;
+                    player.velocity.x = -0.2 * deltaTime * this.browserFrame;
                 }
             }
         }
         camera.position.x += movement * deltaTime;
         colliderBlocks.forEach((collider) => {
-            collider.position.x += movement * deltaTime;
+            collider.position.x += movement * deltaTime * this.browserFrame;
         });
-        player2.position.x += movement * deltaTime;
+        player2.position.x += movement * deltaTime * this.browserFrame;
     };
     enemyAIMovement() {
         // check horizontal distance between player and AI

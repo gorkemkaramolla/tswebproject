@@ -1,4 +1,4 @@
-checkUserBrowser();
+let browserName = checkUserBrowser();
 const canvas: HTMLCanvasElement = <HTMLCanvasElement>(
     document.querySelector("canvas")
 );
@@ -445,7 +445,7 @@ function gameLoop() {
     let currentTime = performance.now();
 
     let deltaTime = currentTime - lastFrameTime;
-    gravity = 0.005 * deltaTime;
+    gravity = 0.005 * deltaTime * player.browserFrame;
     lastFrameTime = currentTime;
 
     if (player.hitbox.position.x < 1) {
@@ -631,16 +631,16 @@ function checkUserBrowser() {
         (navigator.userAgent.indexOf("Opera") ||
             navigator.userAgent.indexOf("OPR")) != -1
     ) {
-        console.log("Opera");
+        return "Opera";
     } else if (navigator.userAgent.indexOf("Edg") != -1) {
-        console.log("Edge");
+        return "Edge";
     } else if (navigator.userAgent.indexOf("Chrome") != -1) {
-        console.log("Chrome");
+        return "Chrome";
     } else if (navigator.userAgent.indexOf("Safari") != -1) {
-        console.log("Safari");
+        return "Safari";
     } else if (navigator.userAgent.indexOf("Firefox") != -1) {
-        console.log("Firefox");
+        return "Firefox";
     } else {
-        console.log("unknown");
+        return "unknown";
     }
 }

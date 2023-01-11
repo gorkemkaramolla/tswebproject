@@ -1,4 +1,4 @@
-checkUserBrowser();
+var browserName = checkUserBrowser();
 var canvas = (document.querySelector("canvas"));
 var c = canvas.getContext("2d");
 //COLLIDER GROUND DATA 36 cols X 27 rows
@@ -425,7 +425,7 @@ var frameDuration = 1000 / 60;
 function gameLoop() {
     var currentTime = performance.now();
     var deltaTime = currentTime - lastFrameTime;
-    gravity = 0.005 * deltaTime;
+    gravity = 0.005 * deltaTime * player.browserFrame;
     lastFrameTime = currentTime;
     if (player.hitbox.position.x < 1) {
         player.velocity.x = 0;
@@ -602,22 +602,22 @@ mainMenu();
 function checkUserBrowser() {
     if ((navigator.userAgent.indexOf("Opera") ||
         navigator.userAgent.indexOf("OPR")) != -1) {
-        console.log("Opera");
+        return "Opera";
     }
     else if (navigator.userAgent.indexOf("Edg") != -1) {
-        console.log("Edge");
+        return "Edge";
     }
     else if (navigator.userAgent.indexOf("Chrome") != -1) {
-        console.log("Chrome");
+        return "Chrome";
     }
     else if (navigator.userAgent.indexOf("Safari") != -1) {
-        console.log("Safari");
+        return "Safari";
     }
     else if (navigator.userAgent.indexOf("Firefox") != -1) {
-        console.log("Firefox");
+        return "Firefox";
     }
     else {
-        console.log("unknown");
+        return "unknown";
     }
 }
 //# sourceMappingURL=game.js.map
