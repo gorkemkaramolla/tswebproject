@@ -89,7 +89,7 @@ class Sprite {
             this.height
         );
     }
-    update() {
+    update(deltaTime) {
         this.draw();
     }
 }

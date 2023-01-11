@@ -452,7 +452,7 @@ function gameLoop() {
     let currentTime = performance.now();
 
     let deltaTime = currentTime - lastFrameTime;
-    gravity = 0.005 * deltaTime * player.browserFrame;
+    gravity = 0.005 * player.browserFrame;
     lastFrameTime = currentTime;
 
     if (player.hitbox.position.x < 1) {
@@ -527,7 +527,7 @@ function gameLoop() {
 
     c.restore();
 
-    player.update();
+    player.update(deltaTime);
     // player2.enemyAIMovement();
 
     //PLAYER2 ANIMATIONS

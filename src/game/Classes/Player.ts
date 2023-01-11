@@ -269,7 +269,7 @@ class Player extends Sprite {
         );
     }
 
-    update() {
+    update(deltaTime) {
         this.updateFrames();
         this.updateHitbox();
 
@@ -293,14 +293,14 @@ class Player extends Sprite {
 
         this.updateHitbox();
 
-        this.applyGravity();
+        this.applyGravity(deltaTime);
         this.checkForHorizontalCollisions();
         this.updateHitbox();
 
         this.checkVerticalCollisions();
     }
-    applyGravity() {
-        this.velocity.y += gravity;
+    applyGravity(deltaTime) {
+        this.velocity.y += gravity * deltaTime;
 
         this.position.y += this.velocity.y;
     }

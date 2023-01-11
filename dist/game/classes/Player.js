@@ -211,7 +211,7 @@ var Player = /** @class */ (function (_super) {
             hitbox1.position.y < hitbox2.position.y + hitbox2.height &&
             hitbox1.position.y + hitbox1.height > hitbox2.position.y);
     };
-    Player.prototype.update = function () {
+    Player.prototype.update = function (deltaTime) {
         this.updateFrames();
         this.updateHitbox();
         //IMAGE LAYOUT
@@ -227,13 +227,13 @@ var Player = /** @class */ (function (_super) {
         }
         player.position.x += player.velocity.x;
         this.updateHitbox();
-        this.applyGravity();
+        this.applyGravity(deltaTime);
         this.checkForHorizontalCollisions();
         this.updateHitbox();
         this.checkVerticalCollisions();
     };
-    Player.prototype.applyGravity = function () {
-        this.velocity.y += gravity;
+    Player.prototype.applyGravity = function (deltaTime) {
+        this.velocity.y += gravity * deltaTime;
         this.position.y += this.velocity.y;
     };
     Player.prototype.checkForHorizontalCollisions = function () {

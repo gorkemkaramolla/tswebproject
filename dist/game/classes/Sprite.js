@@ -52,7 +52,7 @@ var Sprite = /** @class */ (function () {
             return;
         c.drawImage(this.image, cropbox.position.x, cropbox.position.y, cropbox.width, cropbox.height, this.position.x, this.position.y, this.width, this.height);
     };
-    Sprite.prototype.update = function () {
+    Sprite.prototype.update = function (deltaTime) {
         this.draw();
     };
     return Sprite;
