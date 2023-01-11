@@ -119,7 +119,7 @@ var Player = /** @class */ (function (_super) {
                         collider.position.x -=
                             movement_1 * deltaTime * _this.browserFrame;
                     });
-                    player2.position.x -= movement_1 * deltaTime * _this.browserFrame;
+                    // player2.position.x -= movement * deltaTime * this.browserFrame;
                 }
             }
         };
@@ -145,7 +145,7 @@ var Player = /** @class */ (function (_super) {
             colliderBlocks.forEach(function (collider) {
                 collider.position.x += movement * deltaTime * _this.browserFrame;
             });
-            player2.position.x += movement * deltaTime * _this.browserFrame;
+            // player2.position.x += movement * deltaTime * this.browserFrame;
         };
         _this.typeOfPlayer = params.typeOfPlayer;
         _this.counter = 5;
@@ -173,33 +173,37 @@ var Player = /** @class */ (function (_super) {
         };
         return _this;
     }
-    Player.prototype.enemyAIMovement = function () {
-        // check horizontal distance between player and AI
-        if (player.hitbox.position.x < player2.hitbox.position.x &&
-            !player2.playerIsDeath) {
-            player2.velocity.x = -0.2; // move left
-        }
-        else if (player.hitbox.position.x > player2.hitbox.position.x) {
-            player2.velocity.x = 0.2; // move right
-        }
-        else {
-            player2.velocity.x = 0; // don't move horizontally
-        }
-        // check if the player is within a certain distance of the AI on the x-axis
-        var xDistance = Math.abs(player.hitbox.position.x - player2.hitbox.position.x);
-        // check vertical distance between player and AI
-        if (player.hitbox.position.y < player2.hitbox.position.y) {
-            if (player2.numberOfJumps < 1 && player2.velocity.y < 0.5) {
-                jumpMusic.play();
-                player2.velocity.y = -4;
-                player2.numberOfJumps++; // 0 dı 1 oldu zıpladı
-            }
-            player2.keys.space.pressed = false; // Ignore further jump inputs
-        }
-        // check if the player is within a certain distance of the AI on the y-axis
-        var yDistance = Math.abs(player.hitbox.position.y - player2.hitbox.position.y);
-        // check for collision between player and AI hitboxes
-    };
+    // enemyAIMovement() {
+    //     // check horizontal distance between player and AI
+    //     if (
+    //         player.hitbox.position.x < player2.hitbox.position.x &&
+    //         !player2.playerIsDeath
+    //     ) {
+    //         player2.velocity.x = -0.2; // move left
+    //     } else if (player.hitbox.position.x > player2.hitbox.position.x) {
+    //         player2.velocity.x = 0.2; // move right
+    //     } else {
+    //         player2.velocity.x = 0; // don't move horizontally
+    //     }
+    //     // check if the player is within a certain distance of the AI on the x-axis
+    //     const xDistance = Math.abs(
+    //         player.hitbox.position.x - player2.hitbox.position.x
+    //     );
+    //     // check vertical distance between player and AI
+    //     if (player.hitbox.position.y < player2.hitbox.position.y) {
+    //         if (player2.numberOfJumps < 1 && player2.velocity.y < 0.5) {
+    //             jumpMusic.play();
+    //             player2.velocity.y = -4;
+    //             player2.numberOfJumps++; // 0 dı 1 oldu zıpladı
+    //         }
+    //         player2.keys.space.pressed = false; // Ignore further jump inputs
+    //     }
+    //     // check if the player is within a certain distance of the AI on the y-axis
+    //     const yDistance = Math.abs(
+    //         player.hitbox.position.y - player2.hitbox.position.y
+    //     );
+    //     // check for collision between player and AI hitboxes
+    // }
     Player.prototype.checkCollision = function (hitbox1, hitbox2) {
         // check if hitboxes overlap
         return (hitbox1.position.x < hitbox2.position.x + hitbox2.width &&

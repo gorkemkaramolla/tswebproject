@@ -12,7 +12,7 @@ var init = function () {
     if (game.level === 2) {
         game.level = 0;
     }
-    player2.playerIsDeath = false;
+    // player2.playerIsDeath = false;
     currentframes = 0;
     console.log(gameOver);
     camera = {
@@ -164,75 +164,75 @@ var init = function () {
         },
         typeOfPlayer: "player"
     });
-    player2 = new Player({
-        position: {
-            x: 0,
-            y: colliderBlocks[0].position.y
-        },
-        colliderBlocks: colliderBlocks,
-        scale: 1.5,
-        imageSrc: "./Sprites/Enemy/Idle.png",
-        frameRate: 8,
-        animations: {
-            Idle: {
-                imageSrc: "./Sprites/Enemy/Idle.png",
-                frameRate: 8,
-                frameBuffer: 16
-            },
-            IdleLeft: {
-                imageSrc: "./Sprites/Enemy/IdleLeft.png",
-                frameRate: 8,
-                frameBuffer: 16
-            },
-            Run: {
-                imageSrc: "./Sprites/Enemy/Run.png",
-                frameRate: 8,
-                frameBuffer: 16
-            },
-            RunLeft: {
-                imageSrc: "./Sprites/Enemy/RunLeft.png",
-                frameRate: 8,
-                frameBuffer: 16
-            },
-            Jump: {
-                imageSrc: "./Sprites/Enemy/Jump.png",
-                frameRate: 2,
-                frameBuffer: 6
-            },
-            Fall: {
-                imageSrc: "./Sprites/Enemy/Fall.png",
-                frameRate: 2,
-                frameBuffer: 6
-            },
-            JumpLeft: {
-                imageSrc: "./Sprites/Enemy/JumpLeft.png",
-                frameRate: 2,
-                frameBuffer: 6
-            },
-            FallLeft: {
-                imageSrc: "./Sprites/Enemy/FallLeft.png",
-                frameRate: 2,
-                frameBuffer: 6
-            },
-            Attack1: {
-                imageSrc: "./Sprites/Enemy/Attack1.png",
-                frameRate: 4,
-                frameBuffer: 16
-            },
-            Death: {
-                imageSrc: "./Sprites/Enemy/Death.png",
-                frameRate: 6,
-                frameBuffer: 24
-            }
-        },
-        updateHitBoxValue: {
-            width: 65,
-            height: 75,
-            additionX: 80,
-            additionY: 68
-        },
-        typeOfPlayer: "enemy"
-    });
+    // player2 = new Player({
+    //     position: {
+    //         x: 0,
+    //         y: colliderBlocks[0].position.y,
+    //     },
+    //     colliderBlocks,
+    //     scale: 1.5,
+    //     imageSrc: "./Sprites/Enemy/Idle.png",
+    //     frameRate: 8,
+    //     animations: {
+    //         Idle: {
+    //             imageSrc: "./Sprites/Enemy/Idle.png",
+    //             frameRate: 8,
+    //             frameBuffer: 16,
+    //         },
+    //         IdleLeft: {
+    //             imageSrc: "./Sprites/Enemy/IdleLeft.png",
+    //             frameRate: 8,
+    //             frameBuffer: 16,
+    //         },
+    //         Run: {
+    //             imageSrc: "./Sprites/Enemy/Run.png",
+    //             frameRate: 8,
+    //             frameBuffer: 16,
+    //         },
+    //         RunLeft: {
+    //             imageSrc: "./Sprites/Enemy/RunLeft.png",
+    //             frameRate: 8,
+    //             frameBuffer: 16,
+    //         },
+    //         Jump: {
+    //             imageSrc: "./Sprites/Enemy/Jump.png",
+    //             frameRate: 2,
+    //             frameBuffer: 6,
+    //         },
+    //         Fall: {
+    //             imageSrc: "./Sprites/Enemy/Fall.png",
+    //             frameRate: 2,
+    //             frameBuffer: 6,
+    //         },
+    //         JumpLeft: {
+    //             imageSrc: "./Sprites/Enemy/JumpLeft.png",
+    //             frameRate: 2,
+    //             frameBuffer: 6,
+    //         },
+    //         FallLeft: {
+    //             imageSrc: "./Sprites/Enemy/FallLeft.png",
+    //             frameRate: 2,
+    //             frameBuffer: 6,
+    //         },
+    //         Attack1: {
+    //             imageSrc: "./Sprites/Enemy/Attack1.png",
+    //             frameRate: 4,
+    //             frameBuffer: 16,
+    //         },
+    //         Death: {
+    //             imageSrc: "./Sprites/Enemy/Death.png",
+    //             frameRate: 6,
+    //             frameBuffer: 24,
+    //         },
+    //     },
+    //     updateHitBoxValue: {
+    //         width: 65,
+    //         height: 75,
+    //         additionX: 80,
+    //         additionY: 68,
+    //     },
+    //     typeOfPlayer: "enemy",
+    // });
 };
 //INIT ENDS
 var animationFrameID = 0;
@@ -336,75 +336,75 @@ var player = new Player({
     updateHitBoxValue: { width: 24, height: 50, additionX: 70, additionY: 55 },
     typeOfPlayer: "player"
 });
-var player2 = new Player({
-    position: {
-        x: colliderBlocks[14].position.x,
-        y: colliderBlocks[14].position.y
-    },
-    colliderBlocks: colliderBlocks,
-    scale: 1.5,
-    imageSrc: "./Sprites/Enemy/Idle.png",
-    frameRate: 8,
-    animations: {
-        Idle: {
-            imageSrc: "./Sprites/Enemy/Idle.png",
-            frameRate: 8,
-            frameBuffer: 16
-        },
-        IdleLeft: {
-            imageSrc: "./Sprites/Enemy/IdleLeft.png",
-            frameRate: 8,
-            frameBuffer: 16
-        },
-        Run: {
-            imageSrc: "./Sprites/Enemy/Run.png",
-            frameRate: 8,
-            frameBuffer: 16
-        },
-        RunLeft: {
-            imageSrc: "./Sprites/Enemy/RunLeft.png",
-            frameRate: 8,
-            frameBuffer: 16
-        },
-        Jump: {
-            imageSrc: "./Sprites/Enemy/Jump.png",
-            frameRate: 2,
-            frameBuffer: 6
-        },
-        Fall: {
-            imageSrc: "./Sprites/Enemy/Fall.png",
-            frameRate: 2,
-            frameBuffer: 6
-        },
-        JumpLeft: {
-            imageSrc: "./Sprites/Enemy/JumpLeft.png",
-            frameRate: 2,
-            frameBuffer: 6
-        },
-        FallLeft: {
-            imageSrc: "./Sprites/Enemy/FallLeft.png",
-            frameRate: 2,
-            frameBuffer: 6
-        },
-        Attack1: {
-            imageSrc: "./Sprites/Enemy/Attack1.png",
-            frameRate: 4,
-            frameBuffer: 16
-        },
-        Death: {
-            imageSrc: "./Sprites/Enemy/Death.png",
-            frameRate: 6,
-            frameBuffer: 24
-        }
-    },
-    updateHitBoxValue: {
-        width: 65,
-        height: 75,
-        additionX: 80,
-        additionY: 68
-    },
-    typeOfPlayer: "enemy"
-});
+// let player2 = new Player({
+//     position: {
+//         x: colliderBlocks[14].position.x,
+//         y: colliderBlocks[14].position.y,
+//     },
+//     colliderBlocks,
+//     scale: 1.5,
+//     imageSrc: "./Sprites/Enemy/Idle.png",
+//     frameRate: 8,
+//     animations: {
+//         Idle: {
+//             imageSrc: "./Sprites/Enemy/Idle.png",
+//             frameRate: 8,
+//             frameBuffer: 16,
+//         },
+//         IdleLeft: {
+//             imageSrc: "./Sprites/Enemy/IdleLeft.png",
+//             frameRate: 8,
+//             frameBuffer: 16,
+//         },
+//         Run: {
+//             imageSrc: "./Sprites/Enemy/Run.png",
+//             frameRate: 8,
+//             frameBuffer: 16,
+//         },
+//         RunLeft: {
+//             imageSrc: "./Sprites/Enemy/RunLeft.png",
+//             frameRate: 8,
+//             frameBuffer: 16,
+//         },
+//         Jump: {
+//             imageSrc: "./Sprites/Enemy/Jump.png",
+//             frameRate: 2,
+//             frameBuffer: 6,
+//         },
+//         Fall: {
+//             imageSrc: "./Sprites/Enemy/Fall.png",
+//             frameRate: 2,
+//             frameBuffer: 6,
+//         },
+//         JumpLeft: {
+//             imageSrc: "./Sprites/Enemy/JumpLeft.png",
+//             frameRate: 2,
+//             frameBuffer: 6,
+//         },
+//         FallLeft: {
+//             imageSrc: "./Sprites/Enemy/FallLeft.png",
+//             frameRate: 2,
+//             frameBuffer: 6,
+//         },
+//         Attack1: {
+//             imageSrc: "./Sprites/Enemy/Attack1.png",
+//             frameRate: 4,
+//             frameBuffer: 16,
+//         },
+//         Death: {
+//             imageSrc: "./Sprites/Enemy/Death.png",
+//             frameRate: 6,
+//             frameBuffer: 24,
+//         },
+//     },
+//     updateHitBoxValue: {
+//         width: 65,
+//         height: 75,
+//         additionX: 80,
+//         additionY: 68,
+//     },
+//     typeOfPlayer: "enemy",
+// });
 var gameOver = false;
 var camera = {
     position: {
@@ -512,9 +512,9 @@ function gameLoop() {
     player.update();
     // player2.enemyAIMovement();
     //PLAYER2 ANIMATIONS
-    if (player2.deathAnimationPlayed === false) {
-        // player2.update();
-    }
+    // if (player2.deathAnimationPlayed === false) {
+    //     // player2.update();
+    // }
     player.updateCameraBox();
     if (player.hitbox.position.y > canvas.height + 300) {
         backgroundMusic.pause();
@@ -543,27 +543,22 @@ function gameLoop() {
         }
     }
     //ENEMY
-    if (player2.health <= 0) {
-        player2.playerIsDeath = true;
-        player2.velocity.x = 0;
-        player2.swapSprite("Death");
-    }
-    else {
-        if (player2.velocity.x < 0) {
-            player2.lastDirection = "left";
-            player2.swapSprite("RunLeft");
-        }
-        else if (player2.velocity.x > 0) {
-            player2.lastDirection = "right";
-            player2.swapSprite("Run");
-        }
-        else {
-            if (player2.lastDirection === "right")
-                player2.swapSprite("Idle");
-            else
-                player2.swapSprite("IdleLeft");
-        }
-    }
+    // if (player2.health <= 0) {
+    //     player2.playerIsDeath = true;
+    //     player2.velocity.x = 0;
+    //     player2.swapSprite("Death");
+    // } else {
+    //     if (player2.velocity.x < 0) {
+    //         player2.lastDirection = "left";
+    //         player2.swapSprite("RunLeft");
+    //     } else if (player2.velocity.x > 0) {
+    //         player2.lastDirection = "right";
+    //         player2.swapSprite("Run");
+    //     } else {
+    //         if (player2.lastDirection === "right") player2.swapSprite("Idle");
+    //         else player2.swapSprite("IdleLeft");
+    //     }
+    // }
     if (game.textLevel === 1 && !gameLooping) {
         var gradient = c.createLinearGradient(0, 0, canvas.width, 0);
         gradient.addColorStop(0, "white");
