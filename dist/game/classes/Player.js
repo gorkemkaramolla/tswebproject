@@ -140,7 +140,7 @@ var Player = /** @class */ (function (_super) {
                     }
                 }
             }
-            camera.position.x += movement * deltaTime;
+            camera.position.x += movement * deltaTime * _this.browserFrame;
             colliderBlocks.forEach(function (collider) {
                 collider.position.x += movement * deltaTime * _this.browserFrame;
             });

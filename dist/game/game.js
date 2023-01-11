@@ -5,6 +5,7 @@ var c = canvas.getContext("2d");
 var gameLooping = false;
 var attackCount = 0;
 var init = function () {
+    browserName = checkUserBrowser();
     lastFrameTime = performance.now();
     gameLooping = true;
     c.clearRect(0, 0, canvas.width, canvas.height);
@@ -434,7 +435,7 @@ function gameLoop() {
     if (player.keys.space.pressed) {
         if (player.numberOfJumps < 1 && player.velocity.y < 0.5) {
             jumpMusic.play();
-            player.velocity.y = -4;
+            player.velocity.y = -4 * player.browserFrame;
             player.numberOfJumps++; // 0 dı 1 oldu zıpladı
         }
         player.keys.space.pressed = false; // Ignore further jump inputs

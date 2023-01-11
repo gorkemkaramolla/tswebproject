@@ -216,7 +216,7 @@ class Player extends Sprite {
                 }
             }
         }
-        camera.position.x += movement * deltaTime;
+        camera.position.x += movement * deltaTime * this.browserFrame;
         colliderBlocks.forEach((collider) => {
             collider.position.x += movement * deltaTime * this.browserFrame;
         });
