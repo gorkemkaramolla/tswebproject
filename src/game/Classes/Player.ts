@@ -304,7 +304,7 @@ class Player extends Sprite {
     checkForHorizontalCollisions() {
         for (let i = 0; i < this.collisionblocks.length; i++) {
             const collisionBlock = this.collisionblocks[i];
-
+            //s
             if (this.checkCollision(collisionBlock, this.hitbox)) {
                 if (
                     (this.keys.d.pressed && !this.playerIsDeath) ||
