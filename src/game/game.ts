@@ -443,6 +443,12 @@ let lastFrameTime = performance.now();
 const desiredFPS = 60;
 const frameDuration = 1000 / 60;
 function gameLoop() {
+    const background = new Image();
+    background.src = "../background.png";
+    c.drawImage(background, 0, 0, canvas.width, canvas.height);
+    colliderBlocks.forEach((collider) => {
+        collider.update();
+    });
     let currentTime = performance.now();
 
     let deltaTime = currentTime - lastFrameTime;
@@ -463,13 +469,8 @@ function gameLoop() {
         player.keys.space.pressed = false; // Ignore further jump inputs
     }
     c.fillStyle = "#FC9C54";
-    const background = new Image();
-    background.src = "../background.png";
-    c.drawImage(background, 0, 0, canvas.width, canvas.height);
+
     c.save();
-    colliderBlocks.forEach((collider) => {
-        collider.update();
-    });
 
     player.velocity.x = 0;
 

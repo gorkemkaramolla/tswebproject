@@ -424,6 +424,12 @@ var lastFrameTime = performance.now();
 var desiredFPS = 60;
 var frameDuration = 1000 / 60;
 function gameLoop() {
+    var background = new Image();
+    background.src = "../background.png";
+    c.drawImage(background, 0, 0, canvas.width, canvas.height);
+    colliderBlocks.forEach(function (collider) {
+        collider.update();
+    });
     var currentTime = performance.now();
     var deltaTime = currentTime - lastFrameTime;
     gravity = 0.005 * deltaTime * player.browserFrame;
@@ -441,13 +447,7 @@ function gameLoop() {
         player.keys.space.pressed = false; // Ignore further jump inputs
     }
     c.fillStyle = "#FC9C54";
-    var background = new Image();
-    background.src = "../background.png";
-    c.drawImage(background, 0, 0, canvas.width, canvas.height);
     c.save();
-    colliderBlocks.forEach(function (collider) {
-        collider.update();
-    });
     player.velocity.x = 0;
     if (player.playerAttack && !player.playerIsDeath) {
         if (attackCount === 1) {
