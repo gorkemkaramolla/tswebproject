@@ -125,7 +125,7 @@ var mainMenu = function () {
                 gameOver = false;
                 keyEvents();
                 init();
-                gameLoop(Date.now());
+                gameLoop();
             }
             else if (x >= button2X_1 &&
                 x <= button2X_1 + buttonWidth_1 &&

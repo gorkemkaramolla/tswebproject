@@ -4,6 +4,7 @@ var c = canvas.getContext("2d");
 var gameLooping = false;
 var attackCount = 0;
 var init = function () {
+    lastFrameTime = performance.now();
     gameLooping = true;
     c.clearRect(0, 0, canvas.width, canvas.height);
     if (game.level === 2) {
@@ -417,10 +418,13 @@ var prevCamera = {
 };
 var player1DeathAnimationPLayed = false;
 //GAME LOOP
-var lastFrameTime = 0;
-function gameLoop(timestamp) {
-    var deltaTime = timestamp - lastFrameTime;
-    lastFrameTime = timestamp;
+var lastFrameTime = performance.now();
+var desiredFPS = 60;
+var frameDuration = 1000 / 60;
+function gameLoop() {
+    var currentTime = performance.now();
+    var deltaTime = currentTime - lastFrameTime;
+    lastFrameTime = currentTime;
     if (player.hitbox.position.x < 1) {
         player.velocity.x = 0;
         player.position.x -= player.hitbox.width * deltaTime;

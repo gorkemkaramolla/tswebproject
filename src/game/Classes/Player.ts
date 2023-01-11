@@ -139,7 +139,7 @@ class Player extends Sprite {
                     gameOver = true;
                     c.clearRect(0, 0, canvasWidth, canvas.height);
                     gameLooping = true;
-                    gameLoop(Date.now());
+                    gameLoop();
                 }, 4000);
                 return;
             }
@@ -170,16 +170,16 @@ class Player extends Sprite {
         if (playerHitboxX < 2048) {
             if (playerHitboxX <= canvasWidth / 2) {
                 // Move the player
-                player.velocity.x = 1;
+                player.velocity.x = 0.2 * deltaTime;
             } else {
                 // Move the camera and collider blocks in the opposite direction of the player's hitbox position
                 // Set the player's velocity to 0 when the player's position is greater than 32
-                let movement = playerHitboxX >= canvasWidth / 2 ? 1 : 0;
+                let movement = playerHitboxX >= canvasWidth / 2 ? 0.2 : 0;
                 if (
                     Math.abs(camera.position.x) >
                     newColliderData[0].length * 32 - canvasWidth
                 ) {
-                    player.velocity.x = 1;
+                    player.velocity.x = 0.2 * deltaTime;
                     movement = 0;
                 }
 
@@ -198,7 +198,7 @@ class Player extends Sprite {
         const canvasWidth = canvas.width;
         // Check if the player's hitbox position is within the boundaries of the map
         let movement = 0;
-        player.velocity.x = -1;
+        player.velocity.x = -0.2 * deltaTime;
 
         if (playerHitboxX > 0) {
             // Check if the player's hitbox position is within the range where the player can move left
@@ -206,10 +206,10 @@ class Player extends Sprite {
 
             if (player.hitbox.position.x <= canvas.width / 2) {
                 player.velocity.x = 0;
-                movement = 1;
+                movement = 0.2;
                 if (camera.position.x > 0) {
                     movement = 0;
-                    player.velocity.x = -1;
+                    player.velocity.x = -0.2 * deltaTime;
                 }
             }
         }
@@ -225,9 +225,9 @@ class Player extends Sprite {
             player.hitbox.position.x < player2.hitbox.position.x &&
             !player2.playerIsDeath
         ) {
-            player2.velocity.x = -1; // move left
+            player2.velocity.x = -0.2; // move left
         } else if (player.hitbox.position.x > player2.hitbox.position.x) {
-            player2.velocity.x = 1; // move right
+            player2.velocity.x = 0.2; // move right
         } else {
             player2.velocity.x = 0; // don't move horizontally
         }
@@ -286,8 +286,8 @@ class Player extends Sprite {
         else {
             this.draw();
         }
+        player.position.x += player.velocity.x;
 
-        this.position.x += this.velocity.x;
         this.updateHitbox();
 
         this.applyGravity();
@@ -317,7 +317,7 @@ class Player extends Sprite {
                         this.position.x +
                         this.hitbox.width;
 
-                    this.position.x = collisionBlock.position.x - offset - 0.01;
+                    this.position.x = collisionBlock.position.x - offset - 0.1;
                     break;
                 }
 
@@ -333,7 +333,7 @@ class Player extends Sprite {
                         collisionBlock.position.x +
                         collisionBlock.width -
                         offset +
-                        0.01;
+                        0.1;
 
                     break;
                 }

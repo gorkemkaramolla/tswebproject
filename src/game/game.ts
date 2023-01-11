@@ -8,6 +8,7 @@ let gameLooping = false;
 let attackCount = 0;
 
 const init = () => {
+    lastFrameTime = performance.now();
     gameLooping = true;
     c.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -437,11 +438,16 @@ let prevCamera = {
 
 let player1DeathAnimationPLayed = false;
 //GAME LOOP
-let lastFrameTime = 0;
+let lastFrameTime = performance.now();
+const desiredFPS = 60;
+const frameDuration = 1000 / 60;
+function gameLoop() {
+    let currentTime = performance.now();
 
-function gameLoop(timestamp) {
-    let deltaTime = timestamp - lastFrameTime;
-    lastFrameTime = timestamp;
+    let deltaTime = currentTime - lastFrameTime;
+
+    lastFrameTime = currentTime;
+
     if (player.hitbox.position.x < 1) {
         player.velocity.x = 0;
         player.position.x -= player.hitbox.width * deltaTime;
@@ -518,6 +524,7 @@ function gameLoop(timestamp) {
     }
 
     c.restore();
+
     player.update();
     // player2.enemyAIMovement();
 
@@ -609,6 +616,7 @@ function gameLoop(timestamp) {
         c.fillStyle = gradient;
         c.fillText("WOOOOOOOOOOW!", 420, 350);
     }
+
     gameOver !== true && gameLooping
         ? window.requestAnimationFrame(gameLoop)
         : null;
