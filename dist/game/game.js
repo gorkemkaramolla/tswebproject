@@ -416,10 +416,14 @@ var prevCamera = {
     }
 };
 var player1DeathAnimationPLayed = false;
-function gameLoop() {
+//GAME LOOP
+var lastFrameTime = 0;
+function gameLoop(timestamp) {
+    var deltaTime = timestamp - lastFrameTime;
+    lastFrameTime = timestamp;
     if (player.hitbox.position.x < 1) {
         player.velocity.x = 0;
-        player.position.x = player.position.x - player.hitbox.width;
+        player.position.x -= player.hitbox.width * deltaTime;
     }
     if (player.keys.space.pressed) {
         if (player.numberOfJumps < 1 && player.velocity.y < 0.5) {
@@ -462,13 +466,13 @@ function gameLoop() {
         player.lastDirection = "right";
         if (!player.playerAttack)
             player.swapSprite("Run");
-        player.shouldPlatformMoveLeft();
+        player.shouldPlatformMoveLeft(deltaTime);
     }
     else if (player.keys.a.pressed && !player.playerIsDeath) {
         player.lastDirection = "left";
         if (!player.playerAttack)
             player.swapSprite("RunLeft");
-        player.shouldPlatformMoveRight();
+        player.shouldPlatformMoveRight(deltaTime);
     }
     else if (player.velocity.y === 0 && !player.playerAttack) {
         if (player.lastDirection === "right" &&

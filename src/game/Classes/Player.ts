@@ -119,7 +119,7 @@ class Player extends Sprite {
         );
     };
 
-    shouldPlatformMoveLeft = () => {
+    shouldPlatformMoveLeft = (deltaTime) => {
         if (
             Math.abs(camera.position.x) + player.hitbox.position.x >
                 newColliderData[0].length * 32 - 50 &&
@@ -139,7 +139,7 @@ class Player extends Sprite {
                     gameOver = true;
                     c.clearRect(0, 0, canvasWidth, canvas.height);
                     gameLooping = true;
-                    gameLoop();
+                    gameLoop(Date.now());
                 }, 4000);
                 return;
             }
@@ -183,17 +183,17 @@ class Player extends Sprite {
                     movement = 0;
                 }
 
-                camera.position.x -= movement;
+                camera.position.x -= movement * deltaTime;
 
                 colliderBlocks.forEach((collider) => {
-                    collider.position.x -= movement;
+                    collider.position.x -= movement * deltaTime;
                 });
-                player2.position.x -= movement;
+                player2.position.x -= movement * deltaTime;
             }
         }
     };
 
-    shouldPlatformMoveRight = () => {
+    shouldPlatformMoveRight = (deltaTime) => {
         const playerHitboxX = player.hitbox.position.x;
         const canvasWidth = canvas.width;
         // Check if the player's hitbox position is within the boundaries of the map
@@ -213,11 +213,11 @@ class Player extends Sprite {
                 }
             }
         }
-        camera.position.x += movement;
+        camera.position.x += movement * deltaTime;
         colliderBlocks.forEach((collider) => {
-            collider.position.x += movement;
+            collider.position.x += movement * deltaTime;
         });
-        player2.position.x += movement;
+        player2.position.x += movement * deltaTime;
     };
     enemyAIMovement() {
         // check horizontal distance between player and AI

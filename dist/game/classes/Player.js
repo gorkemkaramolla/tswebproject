@@ -55,7 +55,7 @@ var Player = /** @class */ (function (_super) {
             c.fillStyle = "transparent";
             c.fillRect(player.cameraBox.position.x, player.cameraBox.position.y, player.cameraBox.width, player.cameraBox.height);
         };
-        _this.shouldPlatformMoveLeft = function () {
+        _this.shouldPlatformMoveLeft = function (deltaTime) {
             if (Math.abs(camera.position.x) + player.hitbox.position.x >
                 newColliderData[0].length * 32 - 50 &&
                 _this.level !== 1) {
@@ -71,7 +71,7 @@ var Player = /** @class */ (function (_super) {
                         gameOver = true;
                         c.clearRect(0, 0, canvasWidth, canvas.height);
                         gameLooping = true;
-                        gameLoop();
+                        gameLoop(Date.now());
                     }, 4000);
                     return;
                 }
@@ -120,7 +120,7 @@ var Player = /** @class */ (function (_super) {
                 }
             }
         };
-        _this.shouldPlatformMoveRight = function () {
+        _this.shouldPlatformMoveRight = function (deltaTime) {
             var playerHitboxX = player.hitbox.position.x;
             var canvasWidth = canvas.width;
             // Check if the player's hitbox position is within the boundaries of the map
@@ -138,11 +138,11 @@ var Player = /** @class */ (function (_super) {
                     }
                 }
             }
-            camera.position.x += movement;
+            camera.position.x += movement * deltaTime;
             colliderBlocks.forEach(function (collider) {
-                collider.position.x += movement;
+                collider.position.x += movement * deltaTime;
             });
-            player2.position.x += movement;
+            player2.position.x += movement * deltaTime;
         };
         _this.typeOfPlayer = params.typeOfPlayer;
         _this.counter = 5;

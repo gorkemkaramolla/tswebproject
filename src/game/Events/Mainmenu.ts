@@ -149,7 +149,7 @@ const mainMenu = () => {
 
                 keyEvents();
                 init();
-                gameLoop();
+                gameLoop(Date.now());
             } else if (
                 x >= button2X &&
                 x <= button2X + buttonWidth &&
