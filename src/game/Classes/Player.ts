@@ -1,3 +1,5 @@
+//Player class controls pretty much everything of a player.
+//Properties for keys numberOfJumps velocity at x and y axis ...
 class Player extends Sprite {
     level = 0;
     browserFrame = 1;
@@ -120,7 +122,13 @@ class Player extends Sprite {
             player.cameraBox.height
         );
     };
-
+    /*This is the player Movement function to the right side of the screen
+    If the player at range of the left and right side of the game level. Plyaer moves freely until 
+    player reach of the bottom of the screen which for this setup is 512px at x player stops moving
+    instead of player platform's(blocks) goes backward or forward at x axis.
+    And this is also controls the level end of the game when player reach to the end of the level game ends
+    and activates some variable for next level.
+    */
     shouldPlatformMoveLeft = (deltaTime) => {
         if (
             Math.abs(camera.position.x) + player.hitbox.position.x >
@@ -269,6 +277,13 @@ class Player extends Sprite {
         );
     }
 
+    /* 
+        Update function of Player Class is most vital function it calculates every step of the gameLoop for the player 
+        When you call this function from an instance of this class it sorts the processes of the other functions related 
+        to the this class and players. 
+        Ex: this function apply gravity to the player after gravity applied checks for HorizontalCollisions and again updates 
+        player's hitbox then we check vertical collisions if player on ground or still falling.
+    */
     update(deltaTime) {
         this.updateFrames();
         this.updateHitbox();
@@ -304,6 +319,12 @@ class Player extends Sprite {
 
         this.position.y += this.velocity.y;
     }
+    /*Vertical and Horizontal Collision functions we call in update function of this class
+      calls this.checkCollision function which is collision detector. Since we have boxes array
+      to manipulate and draw ground blocks to the screen it compares player dimensions(Right,Left,Top,Bottom)
+      checks the position of them, Ex: if bottom of the player touches top of the boxes which means
+      player on top of a box since this called in everyframe we are having a collision so we can keep the behaviour of it.
+      */
     checkForHorizontalCollisions() {
         for (let i = 0; i < this.collisionblocks.length; i++) {
             const collisionBlock = this.collisionblocks[i];
@@ -374,6 +395,12 @@ class Player extends Sprite {
             height: this.updateHitBoxValue.height,
         };
     }
+    /*
+    updateFrames function controls the sprite's update rate on different images(spritesheet)
+        we control SpriteClass image feature for the current image given from subclass to 
+        the Parent class. And calculate proper frames update for animations
+    */
+
     updateFrames() {
         this.elapsedFrames++;
         if (this.elapsedFrames % this.frameBuffer === 0) {
@@ -459,6 +486,7 @@ class Player extends Sprite {
             }
         }
     }
+    //This is swapping sprites for example player starts gain velocity at x axis game swap player's Idle sprite to the Run sprite
     swapSprite(spriteName: string) {
         if (
             this.image === this.animations[spriteName].image ||
