@@ -1,5 +1,4 @@
 .wrapper {
-    background-color: #c38d9e;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -156,6 +155,8 @@ body {
     overflow-x: hidden;
     display: flex;
     justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
 /*NAVBAR*/
@@ -164,6 +165,7 @@ nav {
     position: sticky;
     z-index: 4;
     top: 0;
+    position: block;
     width: 100%;
     margin: 0;
     padding: 0;

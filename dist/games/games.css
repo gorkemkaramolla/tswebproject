@@ -2,8 +2,12 @@
     background-color: rgb(185, 185, 240);
     width: 95vw;
     color: red;
-    height: 100vh;
+    height: 90vh;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+::-webkit-scrollbar {
+    display: none;
+    scroll-behavior: smooth;
 }
