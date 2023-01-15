@@ -4,7 +4,6 @@ Web development course first term project of the third year. All assets used do 
 The list of assets that belong to me is attached below. </br>
 Game Box includes several games taken from other websites and one game made by me.</br>
 You can click the netlify link below and visit the website.
-
 - [GameBox](https://taupe-sawine-01cc2a.netlify.app/)
   - [MyGame](https://taupe-sawine-01cc2a.netlify.app/game/game.html)
 
@@ -40,7 +39,10 @@ Click here to see published dist directory : https://github.com/gorkemkaramolla/
   - Game Map Datas
     - [colliderdata.ts](https://github.com/gorkemkaramolla/tswebproject/blob/master/src/game/MapData/colliderdata.ts)
     - [imageData.ts](https://github.com/gorkemkaramolla/tswebproject/blob/master/src/game/MapData/imageData.ts)
-
+### Issues
+Due to the computing power of various processors and different frame rates in browsers
+The game may not run smoothly(slower or faster than normal).
+I recommend using the latest version of Chrome for testing.
 
 ### Screenshots
 ![In game platformer](https://github.com/gorkemkaramolla/tswebproject/blob/master/images/Gamess.jpg)
