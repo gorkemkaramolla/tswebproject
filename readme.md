@@ -16,7 +16,8 @@ A brief description of your project goes here.
 
 ### Introduction
 
-A brief overview of what your project is and what problem it solves.
+15/01/2023
+Web development course first term project of the third year. All assets used do not belong to me. They have been added here as a free licensed learning project. The list of assets that belong to me is attached below.
 
 ### Features
 
