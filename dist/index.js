@@ -24,7 +24,7 @@ var gamesList = [
     },
     {
         name: "Snow Boarder",
-        game: "snowboarder/snowBoarder.html",
+        game: "snowBoarder.html",
         image: "../images/SnowBoarder.jpg "
     },
     {
@@ -71,13 +71,7 @@ container.forEach(function (item, i) {
     svg.appendChild(path);
     playBtn.appendChild(svg);
     playBtn.addEventListener("click", function () {
-        if (gamesList[i].name === "Snow Boarder") {
-            console.log("true");
-            window.location.href = "./games/snowboarder/".concat(gamesList[i].game);
-        }
-        else {
-            window.location.href = "./games/".concat(gamesList[i].game);
-        }
+        window.location.href = "./games/".concat(gamesList[i].game);
     });
     // Insert the new element before the reference element
     item.insertBefore(h3, item.firstChild);

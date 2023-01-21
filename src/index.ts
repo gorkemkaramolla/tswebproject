@@ -25,7 +25,7 @@ const gamesList = [
     },
     {
         name: "Snow Boarder",
-        game: "snowboarder/snowBoarder.html",
+        game: "snowBoarder.html",
         image: "../images/SnowBoarder.jpg ",
     },
     {
@@ -81,12 +81,7 @@ container.forEach((item, i) => {
     svg.appendChild(path);
     playBtn.appendChild(svg);
     playBtn.addEventListener("click", () => {
-        if (gamesList[i].name === "Snow Boarder") {
-            console.log("true");
-            window.location.href = `./games/snowboarder/${gamesList[i].game}`;
-        } else {
-            window.location.href = `./games/${gamesList[i].game}`;
-        }
+        window.location.href = `./games/${gamesList[i].game}`;
     });
 
     // Insert the new element before the reference element
