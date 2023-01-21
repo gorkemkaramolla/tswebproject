@@ -24,7 +24,7 @@ var gamesList = [
     },
     {
         name: "Snow Boarder",
-        game: "snowboarder/index.html",
+        game: "snowboarder/snowBoarder.html",
         image: "../images/SnowBoarder.jpg "
     },
     {
