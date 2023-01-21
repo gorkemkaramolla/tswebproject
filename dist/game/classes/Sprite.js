@@ -1,3 +1,8 @@
+/*
+Sprite class is parent of the Player class Player class implement this class
+and use sprite features of the player's sprites such as frames and cropping a sprite sheet
+and making animation from them
+*/
 var Sprite = /** @class */ (function () {
     function Sprite(params) {
         var _this = this;

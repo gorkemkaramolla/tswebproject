@@ -1,9 +1,27 @@
+/*
+    This Script is pretty large script basically controls the game loop.
+    A game loop uses window's animation function. RequestAnimationsPerFrame
+    When you call it you pass the function parameter as same function. It recursively
+    calls itself. The Limit of the game loop and difference of the regular loop. Is pre setted values
+    of browsers. Each Browser have a different rendering speed Ex: chrome is 24 per/second
+    Safari is 7 per /second.
+ */
 var browserName = checkUserBrowser();
 var canvas = (document.querySelector("canvas"));
 var c = canvas.getContext("2d");
 //COLLIDER GROUND DATA 36 cols X 27 rows
 var gameLooping = false;
 var attackCount = 0;
+/*
+   Init function contains same layout with game. We have this as a start method
+   on start we declare variables values player objects and everything we have in the game.
+   The reason for using this function when gameLoop stops or we forced it to stop
+   all variables are lost and we need to start over the game. For example when player reach to the end of the level
+   and goes to the another level. I turn GameOver Flag to the stop gameLoop once transition ends i need
+   to call gameLoop again because level2 will be started. But gameLoop is recursive an once it done the cycle
+   it won't remember the features we have so before calling gameLoop we call this Init function. Initially
+   sets states of the game before game loop.
+ */
 var init = function () {
     browserName = checkUserBrowser();
     lastFrameTime = performance.now();
@@ -419,13 +437,33 @@ var prevCamera = {
     }
 };
 var player1DeathAnimationPLayed = false;
-//GAME LOOP
-var currentTime = 0;
-var lastFrameTime = 0;
+//************************************* GAME LOOP *************************************
+/*
+    I tried to implement deltaTime Logic to the frames of gameLoop.
+    Since all computers and browser's different power of cpu  and frames game works different on every computer
+    So i tried to multiply all speed variables calculations with deltaTime value
+    For example if your pc takes 60 frames per second your deltaTime value will be 1/60
+    Other pc takes 20 frames per second the deltaTime value will be 1/20
+    when we multiply them we will get 1. 20*1/20=1
+    So our game loop will be independent of the power of the pc the and it will work in same speed in every computer.
+
+    But i did have some issues in here with javascript canvas the game still have conflicts on speed on different computers.
+    Currently on my pc it works correctly you may have low frame rate issues when u run the game
+
+    Explanation: We have many instances on the game such as player or game logic. Or we can have multiple players in same time
+    Since each class have a function field of itself such as update() functions. Game loop controls each update method
+    of each game features. And game logic such as level end or player's positions.
+
+    So in chrome this function will be called 24 times on a second each time our all update method's of the other classes will be called.
+    This update methods includes draw methods. That means we draw everything 24 times in a second. If player moved right on one of them
+    so player will be drawn at right position in next frame. This is an oldschool valid animation logic. Since frame rate fast enough the game
+    will give us a live logic video game smoothly playable.
+*/
+var lastFrameTime = performance.now();
 var desiredFPS = 60;
 var frameDuration = 1000 / 60;
 function gameLoop() {
-    currentTime = performance.now();
+    var currentTime = performance.now();
     var background = new Image();
     background.src = "../background.png";
     c.drawImage(background, 0, 0, canvas.width, canvas.height);
@@ -433,7 +471,8 @@ function gameLoop() {
         collider.update();
     });
     var deltaTime = currentTime - lastFrameTime;
-    gravity = 0.0009 * player.browserFrame * deltaTime;
+    gravity = 0.0005 * player.browserFrame * deltaTime;
+    lastFrameTime = currentTime;
     if (player.hitbox.position.x < 1) {
         player.velocity.x = 0;
         player.position.x -= player.hitbox.width * deltaTime;
@@ -441,7 +480,7 @@ function gameLoop() {
     if (player.keys.space.pressed) {
         if (player.numberOfJumps < 1 && player.velocity.y < 0.5) {
             jumpMusic.play();
-            player.velocity.y = -0.5 * deltaTime;
+            player.velocity.y = -0.45 * deltaTime;
             player.numberOfJumps++; // 0 dı 1 oldu zıpladı
         }
         player.keys.space.pressed = false; // Ignore further jump inputs
@@ -587,7 +626,6 @@ function gameLoop() {
         c.fillStyle = gradient;
         c.fillText("WOOOOOOOOOOW!", 420, 350);
     }
-    lastFrameTime = currentTime;
     gameOver !== true && gameLooping
         ? window.requestAnimationFrame(gameLoop)
         : null;

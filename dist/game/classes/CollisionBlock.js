@@ -1,3 +1,7 @@
+/*This class represent Collision Blocks layout
+a collision block is a single square in game's grid system
+position is shows us a coordinate system x and y numbers is the the start point of this block
+*/
 var CollisionBlock = /** @class */ (function () {
     function CollisionBlock(params) {
         this.width = 32;

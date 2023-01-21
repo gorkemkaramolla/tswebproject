@@ -23,6 +23,11 @@ var gamesList = [
         image: "../images/monkey-mart.jpeg"
     },
     {
+        name: "Snow Boarder",
+        game: "snowboarder/index.html",
+        image: "../images/SnowBoarder.jpg "
+    },
+    {
         name: "Boom ",
         game: "boom.html",
         image: "https://img.poki.com/cdn-cgi/image/quality=78,width=600,height=600,fit=cover,f=auto/67a0b9ccd0da47831e4859cf7de8439c.png "
@@ -66,7 +71,13 @@ container.forEach(function (item, i) {
     svg.appendChild(path);
     playBtn.appendChild(svg);
     playBtn.addEventListener("click", function () {
-        window.location.href = "./games/".concat(gamesList[i].game);
+        if (gamesList[i].name === "Snow Boarder") {
+            console.log("true");
+            window.location.href = "./games/snowboarder/".concat(gamesList[i].game);
+        }
+        else {
+            window.location.href = "./games/".concat(gamesList[i].game);
+        }
     });
     // Insert the new element before the reference element
     item.insertBefore(h3, item.firstChild);
