@@ -5,4 +5,4 @@
   for = "*.br"
   [headers.values]
     Content-Encoding = "br"
-    Content-Type = "application/brotli"
+    Content-Type = "application/wasm"
