@@ -27,8 +27,7 @@ Web development course first term project of the third year. All assets used do 
 -   Feature 1
 -   Feature 2
 -   Feature 3
-=======
->>>>>>> b7773dc29b1c726a015f739deb8e5b0b1a5c3eb9
+
 
 
 
